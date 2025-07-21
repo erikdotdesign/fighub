@@ -1,3 +1,45 @@
-.App {
-  padding: 20px;
+.c-app {
+  height: 100vh;
+  background: #fff;
+}
+
+.c-app__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 32px;
+}
+
+.c-app__body {
+  display: flex;
+  flex-direction: column;
+  padding: 32px 24px;
+}
+
+.c-app__footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 8px;
+  background: white;
+}
+
+.c-app__commit-button {
+  outline: none;
+  border: 0;
+  font-family: var(--font-family);
+  line-height: 16px;
+  font-size: 12px;
+  font-weight: 800;
+  background: var(--color-primary);
+  color: #fff;
+  border-radius: var(--border-radius);
+  width: 100%;
+  padding: 12px;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 }

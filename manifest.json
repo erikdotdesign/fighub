@@ -13,9 +13,14 @@
   ],
   "containsWidget": true,
   "widgetApi": "1.0.0",
+  "permissions": ["currentuser"],
   "networkAccess": {
     "allowedDomains": [
-      "none"
+      "https://maps.googleapis.com",
+      "https://ipapi.co",
+      "https://fonts.googleapis.com",
+      "https://fonts.gstatic.com",
+      "https://s3-alpha.figma.com"
     ]
   }
 }
