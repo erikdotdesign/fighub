@@ -1,0 +1,27 @@
+.c-diff {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-grow: 2;
+}
+
+.c-diff__item {
+  width: 33.33%;
+  text-align: center;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: bold;
+  font-family: var(--font-family-mono);
+
+  &.c-diff__item--created {
+    color: var(--color-green);
+  }
+
+  &.c-diff__item--changed {
+    color: var(--color-yellow);
+  }
+
+  &.c-diff__item--deleted {
+    color: var(--color-red);
+  }
+}

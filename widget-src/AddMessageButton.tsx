@@ -3,7 +3,7 @@ import style from "./style";
 const { widget } = figma;
 const { AutoLayout, Text } = widget;
 
-const AddCommitButton = ({
+const AddMessageButton = ({
   onClick
 }: {
   onClick: () => void;
@@ -28,10 +28,10 @@ const AddCommitButton = ({
         fontSize={style.fontSize.medium}
         lineHeight={style.lineHeight.medium}
         fill={style.color.white}>
-        Add commit
+        Add message
       </Text>
     </AutoLayout>
   )
 };
 
-export default AddCommitButton;
+export default AddMessageButton;

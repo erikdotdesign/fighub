@@ -10,6 +10,7 @@ const InitTrackingButton = ({
 }) => {
   return (
     <AutoLayout
+      name="init tracking button"
       width="fill-parent"
       height="hug-contents"
       direction="horizontal"
