@@ -10,6 +10,8 @@ const InitTrackingButton = ({
 }) => {
   return (
     <AutoLayout
+      width="fill-parent"
+      height="hug-contents"
       direction="horizontal"
       horizontalAlignItems="center"
       verticalAlignItems="center"

@@ -1,45 +1,43 @@
-.c-app {
-  height: 100vh;
-  background: #fff;
+:root {
+  --color-primary: #000;
+  --color-secondary: #999;
+  --color-tertiary: #eee;
+  --color-quaternary: #ddd;
+  --color-error: #E61919;
+  --color-success: #248F24;
+  --color-warn: #B37700;
+  --font-family: "Space Grotesk", sans-serif;
+  --font-family-mono: "Space Mono", monospace;
+  --border-radius: 4px;
 }
 
-.c-app__logo {
+.c-app {
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding-bottom: 32px;
+  justify-content: space-between;
+  height: 100vh;
+  width: 100vw;
+  background: #fff;
+  padding: 8px 16px;
 }
 
-.c-app__body {
-  display: flex;
-  flex-direction: column;
-  padding: 32px 24px;
-}
+.c-app__diff {
+  width: 33.33%;
+  text-align: center;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: bold;
+  font-family: var(--font-family-mono);
 
-.c-app__footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  padding: 8px;
-  background: white;
-}
+  &.c-app__diff--created {
+    color: var(--color-success);
+  }
 
-.c-app__commit-button {
-  outline: none;
-  border: 0;
-  font-family: var(--font-family);
-  line-height: 16px;
-  font-size: 12px;
-  font-weight: 800;
-  background: var(--color-primary);
-  color: #fff;
-  border-radius: var(--border-radius);
-  width: 100%;
-  padding: 12px;
-  cursor: pointer;
+  &.c-app__diff--changed {
+    color: var(--color-warn);
+  }
 
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
+  &.c-app__diff--deleted {
+    color: var(--color-error);
   }
 }

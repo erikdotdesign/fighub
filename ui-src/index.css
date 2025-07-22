@@ -1,17 +1,3 @@
-:root {
-  --color-primary: #000;
-  --color-secondary: #999;
-  --color-tertiary: #eee;
-  --color-quaternary: #ddd;
-  --color-error: #E61919;
-  --color-success: #248F24;
-  --color-bug: #ffbb33;
-  --color-warn: #94660B;
-  --font-family: "Space Grotesk", sans-serif;
-  --font-family-mono: "Space Mono", monospace;
-  --border-radius: 4px;
-}
-
 /* Reset */
 
 * {

@@ -10,7 +10,8 @@ const AddCommitButton = ({
 }) => {
   return (
     <AutoLayout
-      minWidth={196}
+      width="fill-parent"
+      height="hug-contents"
       direction="horizontal"
       horizontalAlignItems="center"
       verticalAlignItems="center"
