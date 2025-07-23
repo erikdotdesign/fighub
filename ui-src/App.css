@@ -7,6 +7,8 @@
   --color-secondary-hover: #898989;
   --color-bg-z0: #ffffff;
   --color-bg-z1: #efefef;
+  --color-bg-z2: #DFDFDF;
+  --color-bg-z3: #CFCFCF;
   --color-green: #29a329;
   --color-green-hover: #259225;
   --color-yellow: #b37700;
@@ -27,6 +29,8 @@
   --color-secondary-hover: #898989;
   --color-bg-z0: #000000;
   --color-bg-z1: #202020;
+  --color-bg-z2: #303030;
+  --color-bg-z3: #404040;
   --color-green: #33cc33;
   --color-green-hover: #7bd77b;
   --color-yellow: #ffbb33;
@@ -78,6 +82,7 @@
   padding: 12px 16px;
   background: var(--color-bg-z1);
   border-radius: var(--border-radius);
+  box-shadow: 0 0 0 1px inset var(--color-bg-z2);
 
   :first-child {
     text-transform: uppercase;
@@ -109,14 +114,15 @@
     border: none;
     border-radius: var(--border-radius);
     padding: 12px 16px;
+    box-shadow: 0 0 0 1px inset var(--color-bg-z2);
 
     &:hover {
-      box-shadow: 0 0 0 2px inset var(--color-secondary);
+      box-shadow: 0 0 0 1px inset var(--color-bg-z3);
     }
 
     &:focus {
       outline: none;
-      box-shadow: 0 0 0 2px inset var(--color-primary);
+      box-shadow: 0 0 0 1px inset var(--color-primary);
     }
 
     &::placeholder {
@@ -146,34 +152,35 @@
   padding: 12px 16px;
   border-radius: var(--border-radius);
   text-align: center;
-  color: var(--color-accent);
-  background: var(--color-primary);
+  background: var(--color-bg-z1);
+  color: var(--color-primary);
+  box-shadow: 0 0 0 1px inset var(--color-bg-z2);
+
+  &:hover {
+    background: var(--color-bg-z2);
+    box-shadow: 0 0 0 1px inset var(--color-bg-z3);
+  }
 
   svg {
-    fill: var(--color-accent);
+    fill: var(--color-primary);
   }
 
   &.c-app__button--add-commit {
     padding: 0;
-    box-shadow: none !important;
   }
 
-  &.c-app__button--accent {
-    background: var(--color-accent);
-    color: var(--color-primary);
-    box-shadow: 0 0 0 2px inset var(--color-primary);
+  &.c-app__button--primary {
+    color: var(--color-accent);
+    background: var(--color-primary);
+    box-shadow: none;
 
     svg {
       fill: var(--color-primary);
     }
 
     &:hover {
-      background: var(--color-accent-hover);
+      background: var(--color-primary-hover);
     }
-  }
-
-  &:hover {
-    background: var(--color-primary-hover);
   }
 }
 

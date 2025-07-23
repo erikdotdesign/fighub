@@ -6,7 +6,9 @@ const lightThemeColors = {
   secondary: "#999999",
   bg: {
     z0: "#ffffff",
-    z1: "#efefef"
+    z1: "#efefef",
+    z2: "#DFDFDF",
+    z3: "#CFCFCF"
   },
   green: "#29a329",
   yellow: "#b37700",
@@ -27,7 +29,9 @@ const darkThemeColors = {
   secondary: "#999999",
   bg: {
     z0: "#000000",
-    z1: "#202020"
+    z1: "#202020",
+    z2: "#303030",
+    z3: "#404040"
   },
   green: "#33cc33",
   yellow: "#ffbb33",

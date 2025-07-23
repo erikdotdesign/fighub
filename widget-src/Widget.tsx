@@ -1,13 +1,10 @@
 import { mergeUnique, getIpData, getCommitTheme, getNodePage } from "./helpers";
 import { getThemedStyle, ThemedStyle } from "./style";
-import Logo from "./Logo";
-import CommitDiff from "./CommitDiff";
-import TrackerWarning from "./TrackerWarning";
-import Button from "./Button";
-import CommitId from "./CommitId";
+import NewCommit from "./NewCommit";
+import Commit from "./Commit";
 
 const { widget } = figma;
-const { AutoLayout, Image, Text, useEffect, waitForTask, useSyncedState, useWidgetNodeId } = widget;
+const { AutoLayout, useEffect, waitForTask, useSyncedState, useWidgetNodeId } = widget;
 
 const Widget = () => {
   const widgetId = useWidgetNodeId();
@@ -206,138 +203,20 @@ const Widget = () => {
       verticalAlignItems="start"
       spacing={style.spacing.large}>
       {
-        commits.map((commit) => {
-          const commitStyle = getThemedStyle(commit.theme);
-          return (
-            <AutoLayout
-              key={commit.id}
-              name="new commit"
-              minWidth={560}
-              width="hug-contents"
-              height="hug-contents"
-              direction="vertical"
-              horizontalAlignItems="center"
-              verticalAlignItems="center"
-              fill={commitStyle.color.bg.z0}
-              cornerRadius={commitStyle.cornerRadius.large}
-              strokeWidth={8}
-              stroke={commitStyle.color.primary}
-              spacing={commitStyle.spacing.xLarge}
-              padding={commitStyle.padding.medium}>
-              <AutoLayout
-                direction="vertical"
-                width="fill-parent"
-                height="hug-contents"
-                verticalAlignItems="center"
-                horizontalAlignItems="center"
-                padding={{
-                  top: commitStyle.padding.large,
-                }}
-                spacing={commitStyle.spacing.xLarge}>
-                <Image
-                  width={72}
-                  height={72}
-                  src={commit.user.photo}
-                  strokeWidth={4}
-                  stroke={commitStyle.color.primary}
-                  cornerRadius={72} />
-                <AutoLayout
-                  direction="vertical"
-                  width="fill-parent"
-                  height="hug-contents"
-                  verticalAlignItems="center"
-                  horizontalAlignItems="center"
-                  spacing={commitStyle.spacing.small}>
-                  <Text
-                    fontFamily={commitStyle.fontFamily.mono}
-                    fontWeight={commitStyle.fontWeight.bold}
-                    fontSize={commitStyle.fontSize.medium}
-                    lineHeight={commitStyle.lineHeight.medium}
-                    fill={commitStyle.color.secondary}
-                    textCase="upper">
-                    {`${ commit.user.name } worked on`}
-                  </Text>
-                  <Text
-                    fontFamily={commitStyle.fontFamily.mono}
-                    fontWeight={commitStyle.fontWeight.bold}
-                    fontSize={commitStyle.fontSize.large}
-                    lineHeight={commitStyle.lineHeight.large}
-                    fill={commitStyle.color.primary}>
-                    { commit.pages.main }
-                  </Text>
-                  {
-                    commit.pages.count > 1
-                    ? <Text
-                        fontFamily={commitStyle.fontFamily.mono}
-                        fontWeight={commitStyle.fontWeight.normal}
-                        fontSize={commitStyle.fontSize.medium}
-                        lineHeight={commitStyle.lineHeight.medium}
-                        fill={commitStyle.color.primary}>
-                        {`and ${ commit.pages.count - 1 } other ${ commit.pages.count > 2 ? "pages" : "page" }`}
-                      </Text>
-                    : null
-                  }
-                </AutoLayout>
-              </AutoLayout>
-              <AutoLayout
-                direction="vertical"
-                width="fill-parent"
-                height="hug-contents"
-                spacing={commitStyle.spacing.medium}>
-                <CommitId
-                  style={commitStyle}
-                  id={commit.id} />
-                <CommitDiff
-                  style={commitStyle}
-                  created={commit.layers.created}
-                  changed={commit.layers.changed}
-                  deleted={commit.layers.deleted} />
-              </AutoLayout>
-            </AutoLayout>
-          )
-        })
+        commits.map((commit) => (
+          <Commit
+            style={getThemedStyle(commit.theme)}
+            commit={commit} />
+        ))
       }
-       <AutoLayout
-        name="new commit"
-        minWidth={560}
-        width="hug-contents"
-        height="hug-contents"
-        direction="vertical"
-        horizontalAlignItems="center"
-        verticalAlignItems="center"
-        fill={style.color.bg.z0}
-        cornerRadius={style.cornerRadius.large}
-        strokeWidth={8}
-        stroke={style.color.primary}
-        spacing={style.spacing.medium}
-        padding={style.padding.medium}>
-        <Logo style={style} />
-        <CommitId
-          style={style}
-          id={commitId} />
-        <CommitDiff
-          style={style}
-          created={createdIds.length}
-          changed={changedIds.length}
-          deleted={deletedIds.length} />
-        <AutoLayout
-          width="fill-parent"
-          direction="horizontal"
-          spacing={style.spacing.medium}>
-          <Button
-            fillParent={true}
-            style={style}
-            text="Init"
-            accent={true}
-            onClick={showTrackingUI} />
-          <Button
-            fillParent={true}
-            style={style}
-            text="Add"
-            onClick={showCommitUI} />
-        </AutoLayout>
-        <TrackerWarning style={style} />
-      </AutoLayout>
+      <NewCommit
+        style={style}
+        commitId={commitId}
+        createdIds={createdIds}
+        changedIds={changedIds}
+        deletedIds={deletedIds}
+        showCommitUI={showCommitUI}
+        showTrackingUI={showTrackingUI} />
     </AutoLayout>
   )
 };

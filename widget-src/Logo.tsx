@@ -16,7 +16,7 @@ const Logo = ({
       height="hug-contents"
       horizontalAlignItems="center"
       padding={{
-        vertical: style.padding.medium
+        top: style.padding.medium
       }}>
       <Text
         fontFamily={style.fontFamily.mono}

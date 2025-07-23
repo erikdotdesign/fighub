@@ -25,10 +25,12 @@ const CommitDiff = ({
       verticalAlignItems="center"
       padding={style.padding.shmedium}
       cornerRadius={style.cornerRadius.medium}
-      fill={style.color.bg.z1}>
+      fill={style.color.bg.z1}
+      stroke={style.color.bg.z2}
+      strokeWidth={1}>
       <Label 
         style={style}
-        text="Layers changed" />
+        text="Changes" />
       <Text
         fontFamily={style.fontFamily.mono}
         fontWeight={style.fontWeight.bold}

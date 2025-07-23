@@ -14,11 +14,41 @@ export const getIpData = async () => {
   }
 };
 
-export const formatDate = (timestamp: number): string => {
+export const getDayName = (timestamp: number) => {
   const date = new Date(timestamp);
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  const day = date.getDate().toString().padStart(2, "0");
+  const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const dayIndex = date.getDay();
+  return dayNames[dayIndex];
+}
+
+export const formatDateWithOrdinal = (timestamp: number) => {
+  const date = new Date(timestamp);
+
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  const day = date.getDate();
   const year = date.getFullYear();
+  const month = months[date.getMonth()];
+  const ordinal = getOrdinalSuffix(day);
+
+  return `${month}, ${day}${ordinal} ${year}`;
+}
+
+export const getOrdinalSuffix = (day: number) => {
+  if (day >= 11 && day <= 13) return "th";
+  switch (day % 10) {
+    case 1: return "st";
+    case 2: return "nd";
+    case 3: return "rd";
+    default: return "th";
+  }
+}
+
+export const formatTime = (timestamp: number): string => {
+  const date = new Date(timestamp);
 
   let hours = date.getHours();
   const minutes = date.getMinutes().toString().padStart(2, "0");
@@ -28,7 +58,7 @@ export const formatDate = (timestamp: number): string => {
   hours = hours % 12;
   if (hours === 0) hours = 12;
 
-  return `${month}/${day}/${year}, ${hours}:${minutes}:${seconds} ${ampm}`;
+  return `${hours}:${minutes}:${seconds} ${ampm}`;
 };
 
 export const getCommitTheme = (commitDate: number) => {
