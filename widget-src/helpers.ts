@@ -3,39 +3,30 @@ export const mergeUnique = (existing: string[], incoming: string[]) => {
   return Array.from(set);
 };
 
-export const applyDocumentChangeHandler = async (
-  setCreatedIds,
-  setChangedIds,
-  setDeletedIds
-) => {
-  await figma.loadAllPagesAsync();
+export const getIpData = async () => {
+  try {
+    const res = await fetch("https://ipapi.co/json");
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error("IP lookup failed", err);
+    return null;
+  }
+};
 
-  figma.on("documentchange", (event) => {
-    const created: string[] = [];
-    const changed: string[] = [];
-    const deleted: string[] = [];
+export const formatDate = (timestamp: number): string => {
+  const date = new Date(timestamp);
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  const year = date.getFullYear();
 
-    for (const change of event.documentChanges) {
-      switch (change.type) {
-        case "CREATE":
-        case "STYLE_CREATE":
-          created.push(change.id);
-          break;
+  let hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const seconds = date.getSeconds().toString().padStart(2, "0");
 
-        case "PROPERTY_CHANGE":
-        case "STYLE_PROPERTY_CHANGE":
-          changed.push(change.id);
-          break;
+  const ampm = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12;
+  if (hours === 0) hours = 12;
 
-        case "DELETE":
-        case "STYLE_DELETE":
-          deleted.push(change.id);
-          break;
-      }
-    }
-
-    setCreatedIds(prev => mergeUnique(prev ?? [], created));
-    setChangedIds(prev => mergeUnique(prev ?? [], changed));
-    setDeletedIds(prev => mergeUnique(prev ?? [], deleted));
-  });
+  return `${month}/${day}/${year}, ${hours}:${minutes}:${seconds} ${ampm}`;
 };

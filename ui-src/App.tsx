@@ -12,7 +12,7 @@ const App = () => {
 
   const handleCommit = () => {
     parent.postMessage?.({ pluginMessage: {
-      type: 'add-commit',
+      type: 'new-commit',
       payload: commitMessage
     } }, '*');
   }
@@ -73,7 +73,7 @@ const App = () => {
             <div className="c-app__input">
               <textarea
                 value={commitMessage}
-                placeholder="Add message (required)..."
+                placeholder="Add message..."
                 onChange={(e) => setCommitMessage(e.target.value)} />
             </div>
             <div className="c-app__button-group">

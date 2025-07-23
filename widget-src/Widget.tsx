@@ -1,10 +1,9 @@
-import { applyDocumentChangeHandler } from "./helpers";
+import { mergeUnique, getIpData } from "./helpers";
 import style from "./style";
 import AddCommitButton from "./AddCommitButton";
 import InitTrackingButton from "./InitTrackingButton";
 import Logo from "./Logo";
 import Diff from "./Diff";
-// import MessageInput from "./MessageInput";
 import TrackerWarning from "./TrackerWarning";
 
 const { widget } = figma;
@@ -16,9 +15,12 @@ const Widget = () => {
   const [createdIds, setCreatedIds] = useSyncedState<string[]>("createdIds", []);
   const [changedIds, setChangedIds] = useSyncedState<string[]>("changedIds", []);
   const [deletedIds, setDeletedIds] = useSyncedState<string[]>("deletedIds", []);
-  // const [commitMessage, setCommitMessage] = useSyncedState<string>("commitMessage", "");
+  const [initialized, setInitialized] = useSyncedState<boolean>("initialized", false);
 
   const showTrackingUI = () => {
+    if (!initialized) {
+      setInitialized(true);
+    }
     waitForTask(
       new Promise(() => {
         figma.showUI(__html__, {
@@ -48,35 +50,144 @@ const Widget = () => {
   }
 
   const hydrateState = () => {
-    figma.ui.postMessage({
-      type: "hydrate-state",
-      payload: {
-        commitId,
-        createdIds,
-        changedIds,
-        deletedIds
+    try {
+      figma.ui.postMessage({
+        type: "hydrate-state",
+        payload: {
+          commitId,
+          createdIds,
+          changedIds,
+          deletedIds
+        }
+      });
+    } catch {}
+  }
+
+  const getAffectedPages = async () => {
+    const allAffectedIdsSet = new Set([...createdIds, ...changedIds]);
+    const allAffectedIds =  Array.from(allAffectedIdsSet);
+
+    const pageCounts: Record<string, number> = {};
+
+    for (const id of allAffectedIds) {
+      const node = await figma.getNodeByIdAsync(id);
+      if (!node) continue;
+
+      let current: BaseNode | null = node;
+      while (current && current.type !== "PAGE") {
+        current = current.parent;
       }
-    });
+
+      if (current && current.type === "PAGE") {
+        const pageId = current.id;
+        pageCounts[pageId] = (pageCounts[pageId] || 0) + 1;
+      }
+    }
+
+    const mostAffectedPageId = Object.entries(pageCounts).sort((a, b) => b[1] - a[1])[0]?.[0];
+    const mostAffectedPage = await figma.getNodeByIdAsync(mostAffectedPageId);
+
+    return {
+      pages: pageCounts,
+      mainPage: mostAffectedPage?.name
+    }
+  }
+
+  const handleDocumentChange = (event: any) => {
+    if (!initialized) return;
+
+    const created: string[] = [];
+    const changed: string[] = [];
+    const deleted: string[] = [];
+
+    for (const change of event.documentChanges) {
+      // Ignore widget property changes
+      if (change.type === "PROPERTY_CHANGE" && change.node?.type === "WIDGET") {
+        continue;
+      }
+
+      switch (change.type) {
+        case "CREATE":
+        case "STYLE_CREATE":
+          created.push(change.id);
+          break;
+
+        case "PROPERTY_CHANGE":
+        case "STYLE_PROPERTY_CHANGE":
+          changed.push(change.id);
+          break;
+
+        case "DELETE":
+        case "STYLE_DELETE":
+          deleted.push(change.id);
+          break;
+      }
+    }
+
+    if (created.length) {
+      setCreatedIds(prev => mergeUnique(prev ?? [], created));
+    } else if (changed.length) {
+      setChangedIds(prev => mergeUnique(prev ?? [], changed));
+    } else if (deleted.length) {
+      setDeletedIds(prev => mergeUnique(prev ?? [], deleted));
+    }
+  }
+
+  const handleUIMessages = (msg: any) => {
+    if (msg.type === 'show-tracking-ui') {
+      showTrackingUI();
+    }
+    if (msg.type === 'show-commit-ui') {
+      showCommitUI();
+    }
+    if (msg.type === 'new-commit') {
+      waitForTask(handleNewCommit(msg.payload));
+    }
+  }
+
+  const handleNewCommit = async (commitMessage: string) => {
+    const ipData = await getIpData();
+    const pageData = await getAffectedPages();
+    const newCommit = {
+      id: commitId,
+      date: Date.now(),
+      user: {
+        name: figma.currentUser?.name,
+        photo: figma.currentUser?.photoUrl,
+        color: figma.currentUser?.color
+      },
+      location: {
+        country: ipData ? ipData.country_name : "Middle-earth",
+        region: ipData ? ipData.region : "Mordor",
+        postal: ipData ? ipData.postal : "11111"
+      },
+      message: commitMessage,
+      pages: {
+        count: Object.keys(pageData.pages).length,
+        mainPage: pageData.mainPage
+      },
+      layers: {
+        created: createdIds.length,
+        changed: changedIds.length,
+        deleted: deletedIds.length
+      }
+    }
+    setCommits([...commits, newCommit]);
+    setCommitId(commitId + 1);
+    setCreatedIds([]);
+    setChangedIds([]);
+    setDeletedIds([]);
   }
 
   useEffect(() => {
-    figma.ui.on('message', (msg) => {
-      if (msg.type === 'show-tracking-ui') {
-        showTrackingUI();
-      }
-      if (msg.type === 'show-commit-ui') {
-        showCommitUI();
-      }
-      if (msg.type === 'add-commit') {
-        console.log(msg.payload);
-      }
-    });
-    try {
-      hydrateState();
-    } catch {
-      showTrackingUI();
-      waitForTask(applyDocumentChangeHandler(setCreatedIds, setChangedIds, setDeletedIds));
-    }
+    waitForTask(figma.loadAllPagesAsync());
+    figma.on("documentchange", handleDocumentChange);
+    figma.ui.on('message', handleUIMessages);
+    hydrateState();
+    return function cleanup() {
+      figma.off("documentchange", handleDocumentChange);
+      figma.ui.off("message", handleUIMessages);
+    };
   });
 
   return (
@@ -106,9 +217,6 @@ const Widget = () => {
           createdIds={createdIds}
           changedIds={changedIds}
           deletedIds={deletedIds} />
-        {/* <MessageInput
-          commitMessage={commitMessage}
-          setCommitMessage={setCommitMessage} /> */}
         <AutoLayout
           width="fill-parent"
           direction="horizontal"
