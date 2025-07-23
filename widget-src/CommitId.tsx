@@ -1,33 +1,40 @@
 import { ThemedStyle } from "./style";
+import Label from "./Label";
 
 const { widget } = figma;
 const { AutoLayout, Text } = widget;
 
-const TrackerWarning = ({
-  style
+const CommitId = ({
+  style,
+  id
 }: {
-  style: ThemedStyle
+  style: ThemedStyle;
+  id: number;
 }) => {
   return (
     <AutoLayout
-      name="tracker warning"
+      name="diff"
+      direction="horizontal"
       width="fill-parent"
       height="hug-contents"
-      direction="horizontal"
-      horizontalAlignItems="center"
+      spacing="auto"
       verticalAlignItems="center"
       padding={style.padding.shmedium}
-      cornerRadius={style.cornerRadius.medium}>
+      cornerRadius={style.cornerRadius.medium}
+      fill={style.color.bg.z1}>
+      <Label 
+        style={style}
+        text="Commit" />
       <Text
         fontFamily={style.fontFamily.mono}
         fontWeight={style.fontWeight.bold}
         fontSize={style.fontSize.medium}
         lineHeight={style.lineHeight.medium}
-        fill={style.color.red}>
-        Closing plugin window (X) will terminate tracking
+        fill={style.color.secondary}>
+        { id }
       </Text>
     </AutoLayout>
   )
 };
 
-export default TrackerWarning;
+export default CommitId;

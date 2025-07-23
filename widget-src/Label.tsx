@@ -1,11 +1,13 @@
-import style from "./style";
+import { ThemedStyle } from "./style";
 
 const { widget } = figma;
 const { Text } = widget;
 
 const Label = ({
+  style,
   text
 }: {
+  style: ThemedStyle;
   text: string;
 }) => {
   return (
@@ -14,7 +16,7 @@ const Label = ({
       fontWeight={style.fontWeight.bold}
       fontSize={style.fontSize.medium}
       lineHeight={style.lineHeight.medium}
-      fill={style.color.gray}
+      fill={style.color.secondary}
       textCase="upper">
       { text }
     </Text>

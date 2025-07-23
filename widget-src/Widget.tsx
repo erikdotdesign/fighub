@@ -1,16 +1,18 @@
-import { mergeUnique, getIpData } from "./helpers";
-import style from "./style";
-import AddCommitButton from "./AddCommitButton";
-import InitTrackingButton from "./InitTrackingButton";
+import { mergeUnique, getIpData, getCommitTheme, getNodePage } from "./helpers";
+import { getThemedStyle, ThemedStyle } from "./style";
 import Logo from "./Logo";
-import Diff from "./Diff";
+import CommitDiff from "./CommitDiff";
 import TrackerWarning from "./TrackerWarning";
+import Button from "./Button";
+import CommitId from "./CommitId";
 
 const { widget } = figma;
-const { AutoLayout, useEffect, waitForTask, useSyncedState } = widget;
+const { AutoLayout, Image, Text, useEffect, waitForTask, useSyncedState, useWidgetNodeId } = widget;
 
 const Widget = () => {
-  const [commits, setCommits] = useSyncedState<any>("commits", null);
+  const widgetId = useWidgetNodeId();
+  const [style, setStyle] = useSyncedState<ThemedStyle>("style", getThemedStyle("light"));
+  const [commits, setCommits] = useSyncedState<any>("commits", []);
   const [commitId, setCommitId] = useSyncedState<number>("commitId", 0);
   const [createdIds, setCreatedIds] = useSyncedState<string[]>("createdIds", []);
   const [changedIds, setChangedIds] = useSyncedState<string[]>("changedIds", []);
@@ -32,7 +34,7 @@ const Widget = () => {
     );
     figma.ui.postMessage({ type: "ui-type", payload: "tracking" });
     hydrateState();
-    figma.notify("Tracking changes, closing plugin will cancel tracking.");
+    figma.notify("Tracking changes, closing plugin window will terminate tracking.");
   }
 
   const showCommitUI = () => {
@@ -65,7 +67,7 @@ const Widget = () => {
 
   const getAffectedPages = async () => {
     const allAffectedIdsSet = new Set([...createdIds, ...changedIds]);
-    const allAffectedIds =  Array.from(allAffectedIdsSet);
+    const allAffectedIds = Array.from(allAffectedIdsSet);
 
     const pageCounts: Record<string, number> = {};
 
@@ -73,25 +75,26 @@ const Widget = () => {
       const node = await figma.getNodeByIdAsync(id);
       if (!node) continue;
 
-      let current: BaseNode | null = node;
-      while (current && current.type !== "PAGE") {
-        current = current.parent;
-      }
-
-      if (current && current.type === "PAGE") {
-        const pageId = current.id;
+      const page = getNodePage(node);
+      if (page) {
+        const pageId = page.id;
         pageCounts[pageId] = (pageCounts[pageId] || 0) + 1;
       }
     }
 
     const mostAffectedPageId = Object.entries(pageCounts).sort((a, b) => b[1] - a[1])[0]?.[0];
-    const mostAffectedPage = await figma.getNodeByIdAsync(mostAffectedPageId);
+    const mostAffectedPage = mostAffectedPageId
+      ? await figma.getNodeByIdAsync(mostAffectedPageId)
+      : null;
+
+    const widgetNode = await figma.getNodeByIdAsync(widgetId);
+    const widgetPage = getNodePage(widgetNode);
 
     return {
       pages: pageCounts,
-      mainPage: mostAffectedPage?.name
-    }
-  }
+      mainPage: mostAffectedPage?.type === "PAGE" ? mostAffectedPage.name : widgetPage.name
+    };
+  };
 
   const handleDocumentChange = (event: any) => {
     if (!initialized) return;
@@ -142,15 +145,18 @@ const Widget = () => {
     }
     if (msg.type === 'new-commit') {
       waitForTask(handleNewCommit(msg.payload));
+      showTrackingUI();
     }
   }
 
   const handleNewCommit = async (commitMessage: string) => {
     const ipData = await getIpData();
     const pageData = await getAffectedPages();
+    const commitDate = Date.now();
     const newCommit = {
       id: commitId,
-      date: Date.now(),
+      date: commitDate,
+      theme: getCommitTheme(commitDate),
       user: {
         name: figma.currentUser?.name,
         photo: figma.currentUser?.photoUrl,
@@ -164,7 +170,7 @@ const Widget = () => {
       message: commitMessage,
       pages: {
         count: Object.keys(pageData.pages).length,
-        mainPage: pageData.mainPage
+        main: pageData.mainPage
       },
       layers: {
         created: createdIds.length,
@@ -197,8 +203,101 @@ const Widget = () => {
       height="hug-contents"
       direction="horizontal"
       horizontalAlignItems="center"
-      verticalAlignItems="start">
-      <AutoLayout
+      verticalAlignItems="start"
+      spacing={style.spacing.large}>
+      {
+        commits.map((commit) => {
+          const commitStyle = getThemedStyle(commit.theme);
+          return (
+            <AutoLayout
+              key={commit.id}
+              name="new commit"
+              minWidth={560}
+              width="hug-contents"
+              height="hug-contents"
+              direction="vertical"
+              horizontalAlignItems="center"
+              verticalAlignItems="center"
+              fill={commitStyle.color.bg.z0}
+              cornerRadius={commitStyle.cornerRadius.large}
+              strokeWidth={8}
+              stroke={commitStyle.color.primary}
+              spacing={commitStyle.spacing.xLarge}
+              padding={commitStyle.padding.medium}>
+              <AutoLayout
+                direction="vertical"
+                width="fill-parent"
+                height="hug-contents"
+                verticalAlignItems="center"
+                horizontalAlignItems="center"
+                padding={{
+                  top: commitStyle.padding.large,
+                }}
+                spacing={commitStyle.spacing.xLarge}>
+                <Image
+                  width={72}
+                  height={72}
+                  src={commit.user.photo}
+                  strokeWidth={4}
+                  stroke={commitStyle.color.primary}
+                  cornerRadius={72} />
+                <AutoLayout
+                  direction="vertical"
+                  width="fill-parent"
+                  height="hug-contents"
+                  verticalAlignItems="center"
+                  horizontalAlignItems="center"
+                  spacing={commitStyle.spacing.small}>
+                  <Text
+                    fontFamily={commitStyle.fontFamily.mono}
+                    fontWeight={commitStyle.fontWeight.bold}
+                    fontSize={commitStyle.fontSize.medium}
+                    lineHeight={commitStyle.lineHeight.medium}
+                    fill={commitStyle.color.secondary}
+                    textCase="upper">
+                    {`${ commit.user.name } worked on`}
+                  </Text>
+                  <Text
+                    fontFamily={commitStyle.fontFamily.mono}
+                    fontWeight={commitStyle.fontWeight.bold}
+                    fontSize={commitStyle.fontSize.large}
+                    lineHeight={commitStyle.lineHeight.large}
+                    fill={commitStyle.color.primary}>
+                    { commit.pages.main }
+                  </Text>
+                  {
+                    commit.pages.count > 1
+                    ? <Text
+                        fontFamily={commitStyle.fontFamily.mono}
+                        fontWeight={commitStyle.fontWeight.normal}
+                        fontSize={commitStyle.fontSize.medium}
+                        lineHeight={commitStyle.lineHeight.medium}
+                        fill={commitStyle.color.primary}>
+                        {`and ${ commit.pages.count - 1 } other ${ commit.pages.count > 2 ? "pages" : "page" }`}
+                      </Text>
+                    : null
+                  }
+                </AutoLayout>
+              </AutoLayout>
+              <AutoLayout
+                direction="vertical"
+                width="fill-parent"
+                height="hug-contents"
+                spacing={commitStyle.spacing.medium}>
+                <CommitId
+                  style={commitStyle}
+                  id={commit.id} />
+                <CommitDiff
+                  style={commitStyle}
+                  created={commit.layers.created}
+                  changed={commit.layers.changed}
+                  deleted={commit.layers.deleted} />
+              </AutoLayout>
+            </AutoLayout>
+          )
+        })
+      }
+       <AutoLayout
         name="new commit"
         minWidth={560}
         width="hug-contents"
@@ -206,25 +305,38 @@ const Widget = () => {
         direction="vertical"
         horizontalAlignItems="center"
         verticalAlignItems="center"
-        fill={style.color.white}
+        fill={style.color.bg.z0}
         cornerRadius={style.cornerRadius.large}
         strokeWidth={8}
-        stroke={style.color.black}
+        stroke={style.color.primary}
         spacing={style.spacing.medium}
         padding={style.padding.medium}>
-        <Logo />
-        <Diff
-          createdIds={createdIds}
-          changedIds={changedIds}
-          deletedIds={deletedIds} />
+        <Logo style={style} />
+        <CommitId
+          style={style}
+          id={commitId} />
+        <CommitDiff
+          style={style}
+          created={createdIds.length}
+          changed={changedIds.length}
+          deleted={deletedIds.length} />
         <AutoLayout
           width="fill-parent"
           direction="horizontal"
           spacing={style.spacing.medium}>
-          <InitTrackingButton onClick={showTrackingUI} />
-          <AddCommitButton onClick={showCommitUI} />
+          <Button
+            fillParent={true}
+            style={style}
+            text="Init"
+            accent={true}
+            onClick={showTrackingUI} />
+          <Button
+            fillParent={true}
+            style={style}
+            text="Add"
+            onClick={showCommitUI} />
         </AutoLayout>
-        <TrackerWarning />
+        <TrackerWarning style={style} />
       </AutoLayout>
     </AutoLayout>
   )

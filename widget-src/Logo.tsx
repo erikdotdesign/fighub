@@ -1,9 +1,13 @@
-import style from "./style";
+import { ThemedStyle } from "./style";
 
 const { widget } = figma;
 const { AutoLayout, Text } = widget;
 
-const Logo = () => {
+const Logo = ({
+  style
+}: {
+  style: ThemedStyle;
+}) => {
   return (
     <AutoLayout
       name="logo"
@@ -19,7 +23,7 @@ const Logo = () => {
         fontWeight={style.fontWeight.bold}
         fontSize={style.fontSize.large}
         lineHeight={style.lineHeight.large}
-        fill={style.color.black}>
+        fill={style.color.primary}>
         fighub
       </Text>
     </AutoLayout>

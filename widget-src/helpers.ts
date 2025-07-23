@@ -30,3 +30,20 @@ export const formatDate = (timestamp: number): string => {
 
   return `${month}/${day}/${year}, ${hours}:${minutes}:${seconds} ${ampm}`;
 };
+
+export const getCommitTheme = (commitDate: number) => {
+  const now = new Date(commitDate);
+  const hour = now.getHours();
+
+  const isDaytime = hour >= 6 && hour < 18;
+
+  return isDaytime ? "light" : "dark";
+}
+
+export const getNodePage = (node: any) => {
+  let current = node;
+  while (current && current.type !== "PAGE") {
+    current = current.parent;
+  }
+  return current?.type === "PAGE" ? current : null;
+}
