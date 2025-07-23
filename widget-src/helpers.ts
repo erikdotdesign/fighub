@@ -81,3 +81,34 @@ export const getNodePage = (node: any) => {
 export const capitalize = (str: string): string => {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
+
+export const getAffectedPages = async (widgetId: string, ids: string[]) => {
+  const allAffectedIdsSet = new Set(ids);
+  const allAffectedIds = Array.from(allAffectedIdsSet);
+
+  const pageCounts: Record<string, number> = {};
+
+  for (const id of allAffectedIds) {
+    const node = await figma.getNodeByIdAsync(id);
+    if (!node) continue;
+
+    const page = getNodePage(node);
+    if (page) {
+      const pageId = page.id;
+      pageCounts[pageId] = (pageCounts[pageId] || 0) + 1;
+    }
+  }
+
+  const mostAffectedPageId = Object.entries(pageCounts).sort((a, b) => b[1] - a[1])[0]?.[0];
+  const mostAffectedPage = mostAffectedPageId
+    ? await figma.getNodeByIdAsync(mostAffectedPageId)
+    : null;
+
+  const widgetNode = await figma.getNodeByIdAsync(widgetId);
+  const widgetPage = getNodePage(widgetNode);
+
+  return {
+    pages: pageCounts,
+    mainPage: mostAffectedPage?.type === "PAGE" ? mostAffectedPage.name : widgetPage.name
+  };
+};

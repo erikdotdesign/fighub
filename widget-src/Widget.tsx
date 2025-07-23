@@ -1,4 +1,4 @@
-import { mergeUnique, getIpData, getCommitTheme, getNodePage } from "./helpers";
+import { mergeUnique, getIpData, getCommitTheme, getAffectedPages } from "./helpers";
 import { getThemedStyle, ThemedStyle } from "./style";
 import NewCommit from "./NewCommit";
 import Commit from "./Commit";
@@ -14,12 +14,8 @@ const Widget = () => {
   const [createdIds, setCreatedIds] = useSyncedState<string[]>("createdIds", []);
   const [changedIds, setChangedIds] = useSyncedState<string[]>("changedIds", []);
   const [deletedIds, setDeletedIds] = useSyncedState<string[]>("deletedIds", []);
-  const [initialized, setInitialized] = useSyncedState<boolean>("initialized", false);
 
   const showTrackingUI = () => {
-    if (!initialized) {
-      setInitialized(true);
-    }
     waitForTask(
       new Promise(() => {
         figma.showUI(__html__, {
@@ -62,40 +58,7 @@ const Widget = () => {
     } catch {}
   }
 
-  const getAffectedPages = async () => {
-    const allAffectedIdsSet = new Set([...createdIds, ...changedIds]);
-    const allAffectedIds = Array.from(allAffectedIdsSet);
-
-    const pageCounts: Record<string, number> = {};
-
-    for (const id of allAffectedIds) {
-      const node = await figma.getNodeByIdAsync(id);
-      if (!node) continue;
-
-      const page = getNodePage(node);
-      if (page) {
-        const pageId = page.id;
-        pageCounts[pageId] = (pageCounts[pageId] || 0) + 1;
-      }
-    }
-
-    const mostAffectedPageId = Object.entries(pageCounts).sort((a, b) => b[1] - a[1])[0]?.[0];
-    const mostAffectedPage = mostAffectedPageId
-      ? await figma.getNodeByIdAsync(mostAffectedPageId)
-      : null;
-
-    const widgetNode = await figma.getNodeByIdAsync(widgetId);
-    const widgetPage = getNodePage(widgetNode);
-
-    return {
-      pages: pageCounts,
-      mainPage: mostAffectedPage?.type === "PAGE" ? mostAffectedPage.name : widgetPage.name
-    };
-  };
-
   const handleDocumentChange = (event: any) => {
-    if (!initialized) return;
-
     const created: string[] = [];
     const changed: string[] = [];
     const deleted: string[] = [];
@@ -148,7 +111,7 @@ const Widget = () => {
 
   const handleNewCommit = async (commitMessage: string) => {
     const ipData = await getIpData();
-    const pageData = await getAffectedPages();
+    const pageData = await getAffectedPages(widgetId, [...createdIds, ...changedIds]);
     const commitDate = Date.now();
     const newCommit = {
       id: commitId,
@@ -183,11 +146,19 @@ const Widget = () => {
   }
 
   useEffect(() => {
-    waitForTask(figma.loadAllPagesAsync());
-    figma.on("documentchange", handleDocumentChange);
-    figma.ui.on('message', handleUIMessages);
+    let isMounted = true;
+
+    const init = async () => {
+      await figma.loadAllPagesAsync();
+      if (!isMounted) return;
+      figma.on("documentchange", handleDocumentChange);
+      figma.ui.on("message", handleUIMessages);
+    };
+
+    init();
     hydrateState();
     return function cleanup() {
+      isMounted = false;
       figma.off("documentchange", handleDocumentChange);
       figma.ui.off("message", handleUIMessages);
     };
