@@ -18,7 +18,6 @@ const Button = ({
 }) => {
   return (
     <AutoLayout
-      name="button"
       width={fillParent ? "fill-parent" : "hug-contents"}
       height="hug-contents"
       direction="horizontal"

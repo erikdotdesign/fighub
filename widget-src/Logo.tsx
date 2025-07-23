@@ -10,7 +10,6 @@ const Logo = ({
 }) => {
   return (
     <AutoLayout
-      name="logo"
       direction="horizontal"
       width="fill-parent"
       height="hug-contents"

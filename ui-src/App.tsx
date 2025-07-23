@@ -9,12 +9,21 @@ const App = () => {
   const [changedIds, setChangedIds] = useState<string[]>([]);
   const [deletedIds, setDeletedIds] = useState<string[]>([]);
   const [commitMessage, setCommitMessage] = useState("");
+  const [error, setError] = useState(false);
 
   const handleCommit = () => {
-    parent.postMessage?.({ pluginMessage: {
-      type: 'new-commit',
-      payload: commitMessage
-    } }, '*');
+    if (createdIds.length || changedIds.length || deletedIds.length) {
+      if (commitMessage.trim().length) {
+        parent.postMessage?.({ pluginMessage: {
+          type: 'new-commit',
+          payload: commitMessage
+        } }, '*');
+      } else {
+        setError(true);
+      }
+    } else {
+      parent.postMessage?.({ pluginMessage: { type: 'nothing-to-commit' } }, '*');
+    }
   }
 
   const showTrackingUI = () => {
@@ -23,6 +32,14 @@ const App = () => {
 
   const showCommitUI = () => {
     parent.postMessage?.({ pluginMessage: { type: 'show-commit-ui' } }, '*');
+  }
+
+  const handleTextAreaChange = (e) => {
+    if (error) {
+      setError(false);
+    }
+
+    setCommitMessage(e.target.value);
   }
 
   useEffect(() => {
@@ -46,9 +63,11 @@ const App = () => {
         uiType === "tracking"
         ? <div className="c-app__tracker">
             <Diff
-              createdIds={createdIds}
-              changedIds={changedIds}
-              deletedIds={deletedIds} />
+              diff={{
+                created: createdIds.length,
+                changed: changedIds.length,
+                deleted: deletedIds.length
+              }} />
             <button 
               className="c-app__button c-app__button--add-commit"
               onClick={showCommitUI}>
@@ -64,17 +83,19 @@ const App = () => {
               <div>{commitId}</div>
             </div>
             <div className="c-app__metric">
-              <div>Changes</div>
+              <div>Diff</div>
               <Diff 
-                createdIds={createdIds}
-                changedIds={changedIds}
-                deletedIds={deletedIds} />
+                diff={{
+                  created: createdIds.length,
+                  changed: changedIds.length,
+                  deleted: deletedIds.length
+                }} />
             </div>
-            <div className="c-app__input">
+            <div className={`c-app__input ${error ? "c-app__input--error" : ""}`}>
               <textarea
                 value={commitMessage}
-                placeholder="Add message..."
-                onChange={(e) => setCommitMessage(e.target.value)} />
+                placeholder="Add message (required)..."
+                onChange={handleTextAreaChange} />
             </div>
             <div className="c-app__button-group">
               <button 

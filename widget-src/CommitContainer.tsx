@@ -13,7 +13,6 @@ const CommitContainer = ({
 
   return (
     <AutoLayout
-      name="new commit"
       minWidth={560}
       width="hug-contents"
       height="hug-contents"

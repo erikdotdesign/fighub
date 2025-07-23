@@ -10,7 +10,6 @@ const TrackerWarning = ({
 }) => {
   return (
     <AutoLayout
-      name="tracker warning"
       width="fill-parent"
       height="hug-contents"
       direction="horizontal"

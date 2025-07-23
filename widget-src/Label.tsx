@@ -17,7 +17,8 @@ const Label = ({
       fontSize={style.fontSize.medium}
       lineHeight={style.lineHeight.medium}
       fill={style.color.secondary}
-      textCase="upper">
+      // textCase="upper"
+      >
       { text }
     </Text>
   )

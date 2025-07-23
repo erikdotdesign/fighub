@@ -2,19 +2,19 @@ import React from 'react';
 import './Diff.css';
 
 const Diff = ({
-  createdIds,
-  changedIds,
-  deletedIds
+  diff
 }: {
-  createdIds: string[];
-  changedIds: string[];
-  deletedIds: string[];
+  diff: {
+    created: number;
+    changed: number;
+    deleted: number;
+  }
 }) => {
   return (
     <div className="c-diff">
-      <span className="c-diff__item c-diff__item--created">{`+${createdIds.length}`}</span>
-      <span className="c-diff__item c-diff__item--changed">{`+${changedIds.length}`}</span>
-      <span className="c-diff__item c-diff__item--deleted">{`-${deletedIds.length}`}</span>
+      <span className="c-diff__item c-diff__item--created">{`+${diff.created}`}</span>
+      <span className="c-diff__item c-diff__item--changed">{`±${diff.changed}`}</span>
+      <span className="c-diff__item c-diff__item--deleted">{`-${diff.deleted}`}</span>
     </div>
   )
 };

@@ -84,9 +84,9 @@
   border-radius: var(--border-radius);
   box-shadow: 0 0 0 1px inset var(--color-bg-z2);
 
-  :first-child {
+  /* :first-child {
     text-transform: uppercase;
-  }
+  } */
   
   .c-diff {
     flex-grow: 0;
@@ -129,6 +129,16 @@
       color: var(--color-secondary);
     }
   }
+
+  &.c-app__input--error {
+    textarea {
+      box-shadow: 0 0 0 1px inset var(--color-red);
+
+      &:hover {
+        box-shadow: 0 0 0 1px inset var(--color-red-hover);
+      }
+    }
+  }
 }
 
 .c-app__button-group {
@@ -166,7 +176,14 @@
   }
 
   &.c-app__button--add-commit {
+    width: 24px;
+    height: 24px;
     padding: 0;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
   }
 
   &.c-app__button--primary {

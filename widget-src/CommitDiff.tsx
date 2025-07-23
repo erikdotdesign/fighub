@@ -6,18 +6,13 @@ const { AutoLayout, Text, Span } = widget;
 
 const CommitDiff = ({
   style,
-  changed,
-  created,
-  deleted
+  diff
 }: {
   style: ThemedStyle;
-  changed: number;
-  created: number;
-  deleted: number;
+  diff: any
 }) => {
   return (
     <AutoLayout
-      name="diff"
       direction="horizontal"
       width="fill-parent"
       height="hug-contents"
@@ -30,15 +25,15 @@ const CommitDiff = ({
       strokeWidth={1}>
       <Label 
         style={style}
-        text="Changes" />
+        text="Diff" />
       <Text
         fontFamily={style.fontFamily.mono}
         fontWeight={style.fontWeight.bold}
         fontSize={style.fontSize.medium}
         lineHeight={style.lineHeight.medium}>
-        <Span fill={style.color.green}>+{created} </Span>
-        <Span fill={style.color.yellow}>+{changed} </Span>
-        <Span fill={style.color.red}>-{deleted}</Span>
+        <Span fill={style.color.green}>+{diff.created} </Span>
+        <Span fill={style.color.yellow}>±{diff.changed} </Span>
+        <Span fill={style.color.red}>-{diff.deleted}</Span>
       </Text>
     </AutoLayout>
   )

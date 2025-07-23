@@ -40,9 +40,11 @@ const NewCommit = ({
           id={commitId} />
         <CommitDiff
           style={style}
-          created={createdIds.length}
-          changed={changedIds.length}
-          deleted={deletedIds.length} />
+          diff={{
+            created: createdIds.length,
+            changed: changedIds.length,
+            deleted: deletedIds.length
+          }} />
         <AutoLayout
           width="fill-parent"
           direction="horizontal"

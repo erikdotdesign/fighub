@@ -77,3 +77,7 @@ export const getNodePage = (node: any) => {
   }
   return current?.type === "PAGE" ? current : null;
 }
+
+export const capitalize = (str: string): string => {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+};

@@ -31,7 +31,7 @@ const Widget = () => {
     );
     figma.ui.postMessage({ type: "ui-type", payload: "tracking" });
     hydrateState();
-    figma.notify("Tracking changes, closing plugin window will terminate tracking.");
+    figma.notify("Tracking changes, closing plugin window (X) will terminate tracking");
   }
 
   const showCommitUI = () => {
@@ -136,13 +136,13 @@ const Widget = () => {
   const handleUIMessages = (msg: any) => {
     if (msg.type === 'show-tracking-ui') {
       showTrackingUI();
-    }
-    if (msg.type === 'show-commit-ui') {
+    } else if (msg.type === 'show-commit-ui') {
       showCommitUI();
-    }
-    if (msg.type === 'new-commit') {
+    } else if (msg.type === 'new-commit') {
       waitForTask(handleNewCommit(msg.payload));
       showTrackingUI();
+    } else if (msg.type === 'nothing-to-commit') {
+      figma.notify("Nothing to commit");
     }
   }
 
@@ -169,7 +169,7 @@ const Widget = () => {
         count: Object.keys(pageData.pages).length,
         main: pageData.mainPage
       },
-      layers: {
+      diff: {
         created: createdIds.length,
         changed: changedIds.length,
         deleted: deletedIds.length
@@ -195,7 +195,6 @@ const Widget = () => {
 
   return (
     <AutoLayout
-      name="container"
       width="hug-contents"
       height="hug-contents"
       direction="horizontal"
@@ -205,6 +204,7 @@ const Widget = () => {
       {
         commits.map((commit) => (
           <Commit
+            key={commit.id}
             style={getThemedStyle(commit.theme)}
             commit={commit} />
         ))
