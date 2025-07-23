@@ -3,13 +3,11 @@ import Diff from './Diff';
 import './App.css';
 
 const App = () => {
-  const [diff, setDiff] = useState({
-    created: 0,
-    changed: 0,
-    deleted: 0
-  });
   const [uiType, setUpType] = useState("tracking");
-  const [commitId, setCommitId] = useState("001");
+  const [commitId, setCommitId] = useState<number>(0);
+  const [createdIds, setCreatedIds] = useState<string[]>([]);
+  const [changedIds, setChangedIds] = useState<string[]>([]);
+  const [deletedIds, setDeletedIds] = useState<string[]>([]);
   const [commitMessage, setCommitMessage] = useState("");
 
   const handleCommit = () => {
@@ -30,8 +28,12 @@ const App = () => {
   useEffect(() => {
     window.onmessage = (event) => {
       const message = event.data.pluginMessage;
-      if (message.type === "diff") {
-        setDiff(message.payload);
+      if (message.type === "hydrate-state") {
+        const { payload } = message;
+        setCommitId(payload.commitId);
+        setCreatedIds(payload.createdIds);
+        setChangedIds(payload.changedIds);
+        setDeletedIds(payload.deletedIds);
       } else if (message.type === "ui-type") {
         setUpType(message.payload);
       }
@@ -43,7 +45,10 @@ const App = () => {
       {
         uiType === "tracking"
         ? <div className="c-app__tracker">
-            <Diff diff={diff} />
+            <Diff
+              createdIds={createdIds}
+              changedIds={changedIds}
+              deletedIds={deletedIds} />
             <button 
               className="c-app__button c-app__button--accent c-app__button--add-commit"
               onClick={showCommitUI}>
@@ -60,7 +65,10 @@ const App = () => {
             </div>
             <div className="c-app__metric">
               <div>Layers changed</div>
-              <Diff diff={diff} />
+              <Diff 
+                createdIds={createdIds}
+                changedIds={changedIds}
+                deletedIds={deletedIds} />
             </div>
             <div className="c-app__input">
               <textarea

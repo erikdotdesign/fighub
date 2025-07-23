@@ -1,12 +1,12 @@
 :root {
-  --color-primary: #333;
-  --color-primary-hover: #222;
-  --color-accent: #f2f2f2;
-  --color-accent-hover: #e6e6e6;
+  --color-primary: #202020;
+  --color-primary-hover: #000;
+  --color-accent: #fff;
+  --color-accent-hover: #efefef;
   --color-secondary: #999;
   --color-secondary-hover: #898989;
-  --color-bg-z0: #f2f2f2;
-  --color-bg-z1: #e6e6e6;
+  --color-bg-z0: #fff;
+  --color-bg-z1: #efefef;
   --color-red: #e61919;
   --color-red-hover: #ce1616;
   --color-green: #29a329;
@@ -19,14 +19,14 @@
 }
 
 .figma-dark {
-  --color-primary: #e6e6e6;
-  --color-primary-hover: #f2f2f2;
-  --color-accent: #222;
-  --color-accent-hover: #333;
+  --color-primary: #efefef;
+  --color-primary-hover: #fff;
+  --color-accent: #000;
+  --color-accent-hover: #202020;
   --color-secondary: #999;
   --color-secondary-hover: #898989;
-  --color-bg-z0: #222;
-  --color-bg-z1: #333;
+  --color-bg-z0: #000;
+  --color-bg-z1: #202020;
   --color-red: #EB4747;
   --color-red-hover: #eb7474;
   --color-green: #33cc33;
@@ -85,9 +85,11 @@
   
   .c-diff {
     flex-grow: 0;
+    justify-content: end;
   }
 
   .c-diff__item {
+    width: initial;
     font-size: 12px;
     line-height: 16px;
     padding-left: 8px;

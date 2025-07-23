@@ -12,6 +12,7 @@ const { AutoLayout, useEffect, waitForTask, useSyncedState } = widget;
 
 const Widget = () => {
   const [commits, setCommits] = useSyncedState<any>("commits", null);
+  const [commitId, setCommitId] = useSyncedState<number>("commitId", 0);
   const [createdIds, setCreatedIds] = useSyncedState<string[]>("createdIds", []);
   const [changedIds, setChangedIds] = useSyncedState<string[]>("changedIds", []);
   const [deletedIds, setDeletedIds] = useSyncedState<string[]>("deletedIds", []);
@@ -28,7 +29,7 @@ const Widget = () => {
       })
     );
     figma.ui.postMessage({ type: "ui-type", payload: "tracking" });
-    updateUIDiff();
+    hydrateState();
     figma.notify("Tracking changes, closing plugin will cancel tracking.");
   }
 
@@ -43,16 +44,17 @@ const Widget = () => {
       })
     );
     figma.ui.postMessage({ type: "ui-type", payload: "commit" });
-    updateUIDiff();
+    hydrateState();
   }
 
-  const updateUIDiff = () => {
+  const hydrateState = () => {
     figma.ui.postMessage({
-      type: "diff",
+      type: "hydrate-state",
       payload: {
-        created: createdIds.length,
-        changed: changedIds.length,
-        deleted: deletedIds.length
+        commitId,
+        createdIds,
+        changedIds,
+        deletedIds
       }
     });
   }
@@ -70,7 +72,7 @@ const Widget = () => {
       }
     });
     try {
-      updateUIDiff();
+      hydrateState();
     } catch {
       showTrackingUI();
       waitForTask(applyDocumentChangeHandler(setCreatedIds, setChangedIds, setDeletedIds));
