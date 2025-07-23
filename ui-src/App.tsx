@@ -45,7 +45,7 @@ const App = () => {
         ? <div className="c-app__tracker">
             <Diff diff={diff} />
             <button 
-              className="c-app__add-commit"
+              className="c-app__button c-app__button--accent c-app__button--add-commit"
               onClick={showCommitUI}>
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
             </button>
@@ -68,18 +68,20 @@ const App = () => {
                 placeholder="Add message (required)..."
                 onChange={(e) => setCommitMessage(e.target.value)} />
             </div>
-            <button 
-              className="c-app__button c-app__button--commit"
-              onClick={handleCommit}>
-              Commit
-            </button>
-            <button 
-              className="c-app__button c-app__button--track"
-              onClick={showTrackingUI}>
-              Continue tracking
-            </button>
+            <div className="c-app__button-group">
+              <button 
+                className="c-app__button c-app__button--accent"
+                onClick={showTrackingUI}>
+                Cancel
+              </button>
+              <button 
+                className="c-app__button"
+                onClick={handleCommit}>
+                Commit
+              </button>
+            </div>
             <div className="c-app__tracker-warning">
-              Closing (X) this window will terminate tracking
+              Closing this window (X) will terminate tracking
             </div>
           </div>
       }

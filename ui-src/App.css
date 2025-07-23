@@ -1,21 +1,44 @@
 :root {
-  --color-primary: #000;
+  --color-primary: #333;
+  --color-primary-hover: #222;
+  --color-accent: #f2f2f2;
+  --color-accent-hover: #e6e6e6;
   --color-secondary: #999;
-  --color-tertiary: #eee;
-  --color-quaternary: #ddd;
-  --color-bg-z0: #F2F2F2;
+  --color-secondary-hover: #898989;
+  --color-bg-z0: #f2f2f2;
+  --color-bg-z1: #e6e6e6;
   --color-red: #e61919;
+  --color-red-hover: #ce1616;
   --color-green: #29a329;
+  --color-green-hover: #259225;
   --color-yellow: #b37700;
+  --color-yellow-hover: #a06a00;
   --font-family: "IBM Plex Mono", sans-serif;
   --font-family-mono: "IBM Plex Mono", monospace;
   --border-radius: 8px;
 }
 
+.figma-dark {
+  --color-primary: #e6e6e6;
+  --color-primary-hover: #f2f2f2;
+  --color-accent: #222;
+  --color-accent-hover: #333;
+  --color-secondary: #999;
+  --color-secondary-hover: #898989;
+  --color-bg-z0: #222;
+  --color-bg-z1: #333;
+  --color-red: #EB4747;
+  --color-red-hover: #eb7474;
+  --color-green: #33cc33;
+  --color-green-hover: #7bd77b;
+  --color-yellow: #ffbb33;
+  --color-yellow-hover: #ffca7b;
+}
+
 .c-app {
   height: 100vh;
   width: 100vw;
-  background: #fff;
+  background: var(--color-bg-z0);
 }
 
 .c-app__tracker {
@@ -25,28 +48,12 @@
   padding: 8px;
 }
 
-.c-app__add-commit {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  background: var(--color-primary);
-  border-radius: var(--border-radius);
-
-  svg {
-    width: 20px;
-    height: 20px;
-    fill: #fff;
-  }
-}
-
 .c-app__body {
   display: flex;
   align-items: center;
   flex-direction: column;
   padding: 32px 24px 16px 24px;
-  gap: 12px;
+  gap: 16px;
 }
 
 .c-app__logo {
@@ -69,7 +76,7 @@
   font-weight: bold;
   color: var(--color-secondary);
   padding: 12px 16px;
-  background: var(--color-bg-z0);
+  background: var(--color-bg-z1);
   border-radius: var(--border-radius);
 
   :first-child {
@@ -95,7 +102,7 @@
     width: 100%;
     resize: none;
     height: 100%;
-    background: var(--color-bg-z0);
+    background: var(--color-bg-z1);
     color: var(--color-primary);
     border: none;
     border-radius: var(--border-radius);
@@ -116,8 +123,17 @@
   }
 }
 
-.c-app__button {
+.c-app__button-group {
+  display: flex;
   width: 100%;
+  gap: 16px;
+
+  .c-app__button {
+    flex-grow: 2;
+  } 
+}
+
+.c-app__button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -128,15 +144,34 @@
   padding: 12px 16px;
   border-radius: var(--border-radius);
   text-align: center;
+  color: var(--color-accent);
+  background: var(--color-primary);
 
-  &.c-app__button--commit {
-    color: #fff;
-    background: var(--color-primary);
+  svg {
+    fill: var(--color-accent);
   }
 
-  &.c-app__button--track {
+  &.c-app__button--add-commit {
+    padding: 0;
+    box-shadow: none !important;
+  }
+
+  &.c-app__button--accent {
+    background: var(--color-accent);
     color: var(--color-primary);
     box-shadow: 0 0 0 2px inset var(--color-primary);
+
+    svg {
+      fill: var(--color-primary);
+    }
+
+    &:hover {
+      background: var(--color-accent-hover);
+    }
+  }
+
+  &:hover {
+    background: var(--color-primary-hover);
   }
 }
 

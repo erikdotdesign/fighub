@@ -28,7 +28,7 @@ const AddCommitButton = ({
         fontSize={style.fontSize.medium}
         lineHeight={style.lineHeight.medium}
         fill={style.color.white}>
-        Add commit
+        Add
       </Text>
     </AutoLayout>
   )

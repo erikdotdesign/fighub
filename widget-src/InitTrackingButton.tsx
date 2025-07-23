@@ -27,7 +27,7 @@ const InitTrackingButton = ({
         fontSize={style.fontSize.medium}
         lineHeight={style.lineHeight.medium}
         fill={style.color.black}>
-        Initiate tracking
+        Init
       </Text>
     </AutoLayout>
   )

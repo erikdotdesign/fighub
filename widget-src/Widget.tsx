@@ -22,7 +22,8 @@ const Widget = () => {
       new Promise(() => {
         figma.showUI(__html__, {
           width: 245,
-          height: 40
+          height: 40,
+          themeColors: true
         });
       })
     );
@@ -36,7 +37,8 @@ const Widget = () => {
       new Promise(() => {
         figma.showUI(__html__, {
           width: 350,
-          height: 516
+          height: 484,
+          themeColors: true
         });
       })
     );
@@ -105,8 +107,13 @@ const Widget = () => {
         {/* <MessageInput
           commitMessage={commitMessage}
           setCommitMessage={setCommitMessage} /> */}
-        <AddCommitButton onClick={showCommitUI} />
-        <InitTrackingButton onClick={showTrackingUI} />
+        <AutoLayout
+          width="fill-parent"
+          direction="horizontal"
+          spacing={style.spacing.medium}>
+          <InitTrackingButton onClick={showTrackingUI} />
+          <AddCommitButton onClick={showCommitUI} />
+        </AutoLayout>
         <TrackerWarning />
       </AutoLayout>
     </AutoLayout>

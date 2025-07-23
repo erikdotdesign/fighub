@@ -20,7 +20,7 @@ const TrackerWarning = () => {
         fontSize={style.fontSize.medium}
         lineHeight={style.lineHeight.medium}
         fill={style.color.red}>
-        Closing plugin window will terminate tracking
+        Closing plugin window (X) will terminate tracking
       </Text>
     </AutoLayout>
   )
