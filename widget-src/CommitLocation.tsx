@@ -27,6 +27,7 @@ const CommitLocation = ({
         style={style}
         text="Where" />
       <Text
+        width="fill-parent"
         height="fill-parent"
         verticalAlignText="top"
         fontFamily={style.fontFamily.mono}
@@ -37,6 +38,7 @@ const CommitLocation = ({
         { location.region }
       </Text>
       <Text
+        width="fill-parent"
         fontFamily={style.fontFamily.mono}
         fontWeight={style.fontWeight.bold}
         fontSize={style.fontSize.medium}
@@ -45,6 +47,7 @@ const CommitLocation = ({
         { location.country }
       </Text>
       <Text
+        width="fill-parent"
         fontFamily={style.fontFamily.mono}
         fontWeight={style.fontWeight.normal}
         fontSize={style.fontSize.medium}
