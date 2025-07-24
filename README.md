@@ -1,36 +1,33 @@
-Below are the steps to get your widget running. You can also find instructions at:
+# Fighub – Git-Inspired Version Control for Figma
 
-https://www.figma.com/widget-docs/setup-guide/
+Fighub is a Figma widget that brings Git-style version control directly into your design workflow. It tracks all document changes — including creations, modifications, and deletions — and allows you to commit changes with messages, diffs, user data, timestamps, and location metadata.
 
-This widget template uses TypeScript and NPM, two standard tools in creating JavaScript applications.
+![Screenshot](fighub-cover.png)
 
-First, download Node.js which comes with NPM. This will allow you to install TypeScript and other
-libraries. You can find the download link here:
+## Key Features
 
-https://nodejs.org/en/download/
+**Real-time change tracking**
+Automatically logs new layers, property changes, and deletions in your Figma document.
 
-Next, install TypeScript, esbuild and the latest type definitions by running:
+**Commit history with messages**
+Add descriptive commit messages to track design iterations.
 
-npm install
+**Unlimited commits per widget or branch**
+Each branch can store an unlimited number of commits for robust version history.
 
-If you are familiar with JavaScript, TypeScript will look very familiar. In fact, valid JavaScript code
-is already valid Typescript code.
+**Detailed commit data**
+Each commit includes diff details, user info, time of commit, and location data.
 
-TypeScript adds type annotations to variables. This allows code editors such as Visual Studio Code
-to provide information about the Figma API while you are writing code, as well as help catch bugs
-you previously didn't notice.
+**Adaptive commit themes**
+Commit cards automatically switch between light and dark themes based on the time of commit.
 
-For more information, visit https://www.typescriptlang.org/
+## Why Fighub?
 
-Using TypeScript requires a compiler to convert TypeScript (widget-src/code.tsx) into JavaScript (dist/code.js)
-for the browser to run. We use esbuild to do this for us.
+Fighub is designed to bring Git-like accountability and traceability to your Figma projects. Instead of losing track of design changes across multiple files or versions, you can log and review every modification directly on the canvas.
 
-We recommend writing TypeScript code using Visual Studio code:
-
-1. Download Visual Studio Code if you haven't already: https://code.visualstudio.com/.
-2. Open this directory in Visual Studio Code.
-3. Compile TypeScript to JavaScript: Run the "Terminal > Run Build Task..." menu item,
-   then select "npm: watch". You will have to do this again every time
-   you reopen Visual Studio Code.
-
-That's it! Visual Studio Code will regenerate the JavaScript file every time you save.
+## Getting Started
+1. Add Fighub to your Figma document.
+2. Click “Init” to enable live monitoring of all changes.
+3. When you’re ready to snapshot your work, click “Add".
+4. Write a commit message and click "Commit".
+5. Review your commit history right inside Figma.
