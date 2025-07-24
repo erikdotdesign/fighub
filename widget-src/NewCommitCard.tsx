@@ -14,13 +14,13 @@ const NewCommitCard = ({
   style,
   commitId,
   diff,
-  showTrackingUI,
+  showDiffUI,
   showCommitUI
 }: {
   style: ThemedStyle;
   commitId: number;
   diff: CommitDiff;
-  showTrackingUI: () => void;
+  showDiffUI: () => void;
   showCommitUI: () => void;
 }) => {
   return (
@@ -46,7 +46,7 @@ const NewCommitCard = ({
             width="fill-parent"
             style={style}
             text="Init"
-            onClick={showTrackingUI} />
+            onClick={showDiffUI} />
           <Button
             width="fill-parent"
             primary={true}

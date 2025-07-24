@@ -16,7 +16,7 @@ const Widget = () => {
   const [modifiedIds, setModifiedIds] = useSyncedState<string[]>("modifiedIds", []);
   const [deletedIds, setDeletedIds] = useSyncedState<string[]>("deletedIds", []);
 
-  const showTrackingUI = () => {
+  const showDiffUI = () => {
     waitForTask(
       new Promise(() => {
         figma.showUI(__html__, {
@@ -26,7 +26,7 @@ const Widget = () => {
         });
       })
     );
-    figma.ui.postMessage({ type: "set-ui-type", payload: "tracking" });
+    figma.ui.postMessage({ type: "set-ui-type", payload: "diff" });
     hydrateState();
     figma.notify("Tracking changes, closing plugin window (X) will terminate tracking");
   }
@@ -98,13 +98,13 @@ const Widget = () => {
   }
 
   const handleUIMessages = (msg: any) => {
-    if (msg.type === 'show-tracking-ui') {
-      showTrackingUI();
+    if (msg.type === 'show-diff-ui') {
+      showDiffUI();
     } else if (msg.type === 'show-commit-ui') {
       showCommitUI();
     } else if (msg.type === 'new-commit') {
       waitForTask(handleNewCommit(msg.payload));
-      showTrackingUI();
+      showDiffUI();
     } else if (msg.type === 'nothing-to-commit') {
       figma.notify("Nothing to commit");
     } else if (msg.type === 'message-required') {
@@ -191,7 +191,7 @@ const Widget = () => {
           deleted: deletedIds.length
         }}
         showCommitUI={showCommitUI}
-        showTrackingUI={showTrackingUI} />
+        showDiffUI={showDiffUI} />
     </AutoLayout>
   )
 };

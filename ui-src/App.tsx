@@ -3,7 +3,7 @@ import Diff from './Diff';
 import './App.css';
 
 const App = () => {
-  const [uiType, setUiType] = useState("tracking");
+  const [uiType, setUiType] = useState("diff");
   const [commitId, setCommitId] = useState<number>(0);
   const [createdIds, setCreatedIds] = useState<string[]>([]);
   const [modifiedIds, setModifiedIds] = useState<string[]>([]);
@@ -27,8 +27,8 @@ const App = () => {
     }
   }
 
-  const showTrackingUI = () => {
-    parent.postMessage?.({ pluginMessage: { type: 'show-tracking-ui' } }, '*');
+  const showDiffUI = () => {
+    parent.postMessage?.({ pluginMessage: { type: 'show-diff-ui' } }, '*');
   }
 
   const showCommitUI = () => {
@@ -60,61 +60,63 @@ const App = () => {
 
   return (
     <main className="c-app">
-      {
-        uiType === "tracking"
-        ? <div className="c-app__tracker">
-            <Diff
-              diff={{
-                created: createdIds.length,
-                modified: modifiedIds.length,
-                deleted: deletedIds.length
-              }} />
-            <button 
-              className="c-app__button c-app__button--add-commit"
-              onClick={showCommitUI}>
-              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
-            </button>
-          </div>
-        : <div className="c-app__body">
-            <div className="c-app__logo">
-              fighub
-            </div>
-            <div className="c-app__metric">
-              <div>Commit</div>
-              <div>{commitId}</div>
-            </div>
-            <div className="c-app__metric">
-              <div>Diff</div>
-              <Diff 
+      <div className={`c-app__body c-app__body--${uiType}`}>
+        {
+          uiType === "diff"
+          ? <>
+              <Diff
                 diff={{
                   created: createdIds.length,
                   modified: modifiedIds.length,
                   deleted: deletedIds.length
                 }} />
-            </div>
-            <div className={`c-app__input ${error ? "c-app__input--error" : ""}`}>
-              <textarea
-                value={commitMessage}
-                placeholder="Add message (required)..."
-                onChange={handleTextAreaChange} />
-            </div>
-            <div className="c-app__button-group">
               <button 
-                className="c-app__button"
-                onClick={showTrackingUI}>
-                Cancel
+                className="c-app__button c-app__button--add-commit"
+                onClick={showCommitUI}>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
               </button>
-              <button 
-                className="c-app__button c-app__button--primary"
-                onClick={handleCommit}>
-                Commit
-              </button>
-            </div>
-            <div className="c-app__tracker-warning">
-              Closing this window (X) will terminate tracking
-            </div>
-          </div>
-      }
+            </>
+          : <>
+              <div className="c-app__logo">
+                fighub
+              </div>
+              <div className="c-app__tile">
+                <div>Commit</div>
+                <div>{commitId}</div>
+              </div>
+              <div className="c-app__tile">
+                <div>Diff</div>
+                <Diff 
+                  diff={{
+                    created: createdIds.length,
+                    modified: modifiedIds.length,
+                    deleted: deletedIds.length
+                  }} />
+              </div>
+              <div className={`c-app__input ${error ? "c-app__input--error" : ""}`}>
+                <textarea
+                  value={commitMessage}
+                  placeholder="Add message (required)..."
+                  onChange={handleTextAreaChange} />
+              </div>
+              <div className="c-app__button-group">
+                <button 
+                  className="c-app__button"
+                  onClick={showDiffUI}>
+                  Cancel
+                </button>
+                <button 
+                  className="c-app__button c-app__button--primary"
+                  onClick={handleCommit}>
+                  Commit
+                </button>
+              </div>
+              <div className="c-app__tracker-warning">
+                Closing this window (X) will terminate tracking
+              </div>
+            </>
+        }
+      </div>
     </main>
   )
 };
