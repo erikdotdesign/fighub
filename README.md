@@ -7,18 +7,23 @@ Fighub is a Figma widget that brings Git-style version control directly into you
 ## Key Features
 
 * **Real-time change tracking**
+
 Automatically logs new layers/styles, property changes, and deletions in your Figma document.
 
 * **Commit history with messages**
+
 Add descriptive commit messages to track design iterations.
 
 * **Unlimited commits per widget or branch**
+
 Each branch can store an unlimited number of commits for robust version history.
 
 * **Detailed commit data**
+
 Each commit includes diff details, user info, time of commit, and location data.
 
 * **Adaptive commit themes**
+
 Commit cards automatically switch between light and dark themes based on the time of commit.
 
 ## Why Fighub?
