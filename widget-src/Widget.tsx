@@ -26,7 +26,7 @@ const Widget = () => {
         });
       })
     );
-    figma.ui.postMessage({ type: "ui-type", payload: "tracking" });
+    figma.ui.postMessage({ type: "set-ui-type", payload: "tracking" });
     hydrateState();
     figma.notify("Tracking changes, closing plugin window (X) will terminate tracking");
   }
@@ -41,7 +41,7 @@ const Widget = () => {
         });
       })
     );
-    figma.ui.postMessage({ type: "ui-type", payload: "commit" });
+    figma.ui.postMessage({ type: "set-ui-type", payload: "commit" });
     hydrateState();
   }
 

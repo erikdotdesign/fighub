@@ -3,7 +3,7 @@ import Diff from './Diff';
 import './App.css';
 
 const App = () => {
-  const [uiType, setUpType] = useState("tracking");
+  const [uiType, setUiType] = useState("tracking");
   const [commitId, setCommitId] = useState<number>(0);
   const [createdIds, setCreatedIds] = useState<string[]>([]);
   const [modifiedIds, setModifiedIds] = useState<string[]>([]);
@@ -52,8 +52,8 @@ const App = () => {
         setCreatedIds(payload.createdIds);
         setModifiedIds(payload.modifiedIds);
         setDeletedIds(payload.deletedIds);
-      } else if (message.type === "ui-type") {
-        setUpType(message.payload);
+      } else if (message.type === "set-ui-type") {
+        setUiType(message.payload);
       }
     };
   }, []);
