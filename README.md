@@ -6,8 +6,7 @@ Fighub is a Figma widget that brings Git-style version control directly into you
 
 ## Key Features
 
-**Real-time change tracking**
-
+**Real-time change tracking** \
 Automatically logs new layers/styles, property changes, and deletions in your Figma document.
 
 **Commit history with messages** \
