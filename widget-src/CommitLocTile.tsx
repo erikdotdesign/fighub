@@ -30,6 +30,7 @@ const CommitLocTile = ({
         width="fill-parent"
         height="fill-parent"
         verticalAlignText="top"
+        truncate={2}
         fontFamily={style.fontFamily.mono}
         fontWeight={style.fontWeight.semiBold}
         fontSize={style.fontSize.large}
@@ -39,6 +40,7 @@ const CommitLocTile = ({
       </Text>
       <Text
         width="fill-parent"
+        truncate={1}
         fontFamily={style.fontFamily.mono}
         fontWeight={style.fontWeight.bold}
         fontSize={style.fontSize.medium}
