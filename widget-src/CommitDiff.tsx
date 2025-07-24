@@ -9,7 +9,11 @@ const CommitDiff = ({
   diff
 }: {
   style: ThemedStyle;
-  diff: any
+  diff: {
+    created: number;
+    modified: number;
+    deleted: number;
+  }
 }) => {
   return (
     <AutoLayout
@@ -32,7 +36,7 @@ const CommitDiff = ({
         fontSize={style.fontSize.medium}
         lineHeight={style.lineHeight.medium}>
         <Span fill={style.color.green}>+{diff.created} </Span>
-        <Span fill={style.color.yellow}>±{diff.changed} </Span>
+        <Span fill={style.color.yellow}>±{diff.modified} </Span>
         <Span fill={style.color.red}>-{diff.deleted}</Span>
       </Text>
     </AutoLayout>

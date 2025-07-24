@@ -1,7 +1,8 @@
+import { Commit } from "./types";
 import { mergeUnique, getIpData, getCommitTheme, getAffectedPages } from "./helpers";
 import { getThemedStyle, ThemedStyle } from "./style";
 import NewCommit from "./NewCommit";
-import Commit from "./Commit";
+import CommitItem from "./CommitItem";
 
 const { widget } = figma;
 const { AutoLayout, useEffect, waitForTask, useSyncedState, useWidgetNodeId } = widget;
@@ -9,10 +10,10 @@ const { AutoLayout, useEffect, waitForTask, useSyncedState, useWidgetNodeId } = 
 const Widget = () => {
   const widgetId = useWidgetNodeId();
   const [style, setStyle] = useSyncedState<ThemedStyle>("style", getThemedStyle("light"));
-  const [commits, setCommits] = useSyncedState<any>("commits", []);
+  const [commits, setCommits] = useSyncedState<Commit[]>("commits", []);
   const [commitId, setCommitId] = useSyncedState<number>("commitId", 0);
   const [createdIds, setCreatedIds] = useSyncedState<string[]>("createdIds", []);
-  const [changedIds, setChangedIds] = useSyncedState<string[]>("changedIds", []);
+  const [modifiedIds, setModifiedIds] = useSyncedState<string[]>("modifiedIds", []);
   const [deletedIds, setDeletedIds] = useSyncedState<string[]>("deletedIds", []);
 
   const showTrackingUI = () => {
@@ -51,7 +52,7 @@ const Widget = () => {
         payload: {
           commitId,
           createdIds,
-          changedIds,
+          modifiedIds,
           deletedIds
         }
       });
@@ -60,7 +61,7 @@ const Widget = () => {
 
   const handleDocumentChange = (event: any) => {
     const created: string[] = [];
-    const changed: string[] = [];
+    const modified: string[] = [];
     const deleted: string[] = [];
 
     for (const change of event.documentChanges) {
@@ -77,7 +78,7 @@ const Widget = () => {
 
         case "PROPERTY_CHANGE":
         case "STYLE_PROPERTY_CHANGE":
-          changed.push(change.id);
+          modified.push(change.id);
           break;
 
         case "DELETE":
@@ -89,8 +90,8 @@ const Widget = () => {
 
     if (created.length) {
       setCreatedIds(prev => mergeUnique(prev ?? [], created));
-    } else if (changed.length) {
-      setChangedIds(prev => mergeUnique(prev ?? [], changed));
+    } else if (modified.length) {
+      setModifiedIds(prev => mergeUnique(prev ?? [], modified));
     } else if (deleted.length) {
       setDeletedIds(prev => mergeUnique(prev ?? [], deleted));
     }
@@ -106,26 +107,27 @@ const Widget = () => {
       showTrackingUI();
     } else if (msg.type === 'nothing-to-commit') {
       figma.notify("Nothing to commit");
+    } else if (msg.type === 'message-required') {
+      figma.notify("Message required");
     }
   }
 
   const handleNewCommit = async (commitMessage: string) => {
     const ipData = await getIpData();
-    const pageData = await getAffectedPages(widgetId, [...createdIds, ...changedIds]);
+    const pageData = await getAffectedPages(widgetId, [...createdIds, ...modifiedIds]);
     const commitDate = Date.now();
-    const newCommit = {
+    const newCommit: Commit = {
       id: commitId,
-      date: commitDate,
+      timestamp: commitDate,
       theme: getCommitTheme(commitDate),
       user: {
-        name: figma.currentUser?.name,
-        photo: figma.currentUser?.photoUrl,
-        color: figma.currentUser?.color
+        name: figma.currentUser ? figma.currentUser.name : "User",
+        photo: figma.currentUser && figma.currentUser.photoUrl ? figma.currentUser.photoUrl : "https://dummyjson.com/icon/user/72"
       },
       location: {
-        country: ipData ? ipData.country_name : "Middle-earth",
-        region: ipData ? ipData.region : "Mordor",
-        postal: ipData ? ipData.postal : "11111"
+        country: ipData ? ipData.country_name : "Zarovia",
+        region: ipData ? ipData.region : "Solthara",
+        postal: ipData ? ipData.postal : "99999"
       },
       message: commitMessage,
       pages: {
@@ -134,14 +136,14 @@ const Widget = () => {
       },
       diff: {
         created: createdIds.length,
-        changed: changedIds.length,
+        modified: modifiedIds.length,
         deleted: deletedIds.length
       }
     }
     setCommits([...commits, newCommit]);
     setCommitId(commitId + 1);
     setCreatedIds([]);
-    setChangedIds([]);
+    setModifiedIds([]);
     setDeletedIds([]);
   }
 
@@ -174,7 +176,7 @@ const Widget = () => {
       spacing={style.spacing.large}>
       {
         commits.map((commit) => (
-          <Commit
+          <CommitItem
             key={commit.id}
             style={getThemedStyle(commit.theme)}
             commit={commit} />
@@ -184,7 +186,7 @@ const Widget = () => {
         style={style}
         commitId={commitId}
         createdIds={createdIds}
-        changedIds={changedIds}
+        modifiedIds={modifiedIds}
         deletedIds={deletedIds}
         showCommitUI={showCommitUI}
         showTrackingUI={showTrackingUI} />

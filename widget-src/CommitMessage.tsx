@@ -9,7 +9,7 @@ const CommitMessage = ({
   message
 }: {
   style: ThemedStyle;
-  message: string | null
+  message: string
 }) => {
   return (
     <AutoLayout
@@ -36,8 +36,8 @@ const CommitMessage = ({
         fontWeight={style.fontWeight.normal}
         fontSize={style.fontSize.medium}
         lineHeight={style.lineHeight.medium}
-        fill={message ? style.color.primary : style.color.secondary}>
-        { message ? message : "No message" }
+        fill={style.color.primary}>
+        { message }
       </Text>
     </AutoLayout>
   )

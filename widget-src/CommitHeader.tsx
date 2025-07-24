@@ -1,3 +1,4 @@
+import { Commit } from "./types";
 import { ThemedStyle } from "./style";
 import Label from "./Label";
 
@@ -9,7 +10,7 @@ const CommitHeader = ({
   commit
 }: {
   style: ThemedStyle;
-  commit: any
+  commit: Commit
 }) => {
   return (
     <AutoLayout
@@ -18,9 +19,6 @@ const CommitHeader = ({
       height="hug-contents"
       verticalAlignItems="center"
       horizontalAlignItems="center"
-      padding={{
-        top: style.padding.medium
-      }}
       spacing={style.spacing.xLarge}>
       <Image
         width={72}

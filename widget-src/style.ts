@@ -59,7 +59,8 @@ export const getThemedStyle = (theme: Theme) => ({
     small: 12,
     shmedium: 16,
     medium: 32,
-    large: 56
+    large: 56,
+    xLarge: 64
   },
   fontFamily: {
     sansSerif: "IBM Plex Mono",
@@ -73,7 +74,7 @@ export const getThemedStyle = (theme: Theme) => ({
     medium: 24,
     large: 48
   },
-  fontWeight: {
+  fontWeight: <Record<"normal" | "semiBold" | "bold", WidgetJSX.FontWeightNumerical>> {
     normal: 400,
     semiBold: 600,
     bold: 700

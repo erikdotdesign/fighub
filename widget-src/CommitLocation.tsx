@@ -1,5 +1,5 @@
+import { CommitLocation } from "./types";
 import { ThemedStyle } from "./style";
-import { getDayName, formatDateWithOrdinal, formatTime } from "./helpers";
 import Label from "./Label";
 
 const { widget } = figma;
@@ -10,7 +10,7 @@ const CommitLocation = ({
   location
 }: {
   style: ThemedStyle;
-  location: any
+  location: CommitLocation
 }) => {
   return (
     <AutoLayout

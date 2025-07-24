@@ -6,19 +6,20 @@ const App = () => {
   const [uiType, setUpType] = useState("tracking");
   const [commitId, setCommitId] = useState<number>(0);
   const [createdIds, setCreatedIds] = useState<string[]>([]);
-  const [changedIds, setChangedIds] = useState<string[]>([]);
+  const [modifiedIds, setModifiedIds] = useState<string[]>([]);
   const [deletedIds, setDeletedIds] = useState<string[]>([]);
   const [commitMessage, setCommitMessage] = useState("");
   const [error, setError] = useState(false);
 
   const handleCommit = () => {
-    if (createdIds.length || changedIds.length || deletedIds.length) {
+    if (createdIds.length || modifiedIds.length || deletedIds.length) {
       if (commitMessage.trim().length) {
         parent.postMessage?.({ pluginMessage: {
           type: 'new-commit',
           payload: commitMessage
         } }, '*');
       } else {
+        parent.postMessage?.({ pluginMessage: { type: 'message-required' } }, '*');
         setError(true);
       }
     } else {
@@ -34,7 +35,7 @@ const App = () => {
     parent.postMessage?.({ pluginMessage: { type: 'show-commit-ui' } }, '*');
   }
 
-  const handleTextAreaChange = (e) => {
+  const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (error) {
       setError(false);
     }
@@ -49,7 +50,7 @@ const App = () => {
         const { payload } = message;
         setCommitId(payload.commitId);
         setCreatedIds(payload.createdIds);
-        setChangedIds(payload.changedIds);
+        setModifiedIds(payload.modifiedIds);
         setDeletedIds(payload.deletedIds);
       } else if (message.type === "ui-type") {
         setUpType(message.payload);
@@ -65,7 +66,7 @@ const App = () => {
             <Diff
               diff={{
                 created: createdIds.length,
-                changed: changedIds.length,
+                modified: modifiedIds.length,
                 deleted: deletedIds.length
               }} />
             <button 
@@ -87,7 +88,7 @@ const App = () => {
               <Diff 
                 diff={{
                   created: createdIds.length,
-                  changed: changedIds.length,
+                  modified: modifiedIds.length,
                   deleted: deletedIds.length
                 }} />
             </div>

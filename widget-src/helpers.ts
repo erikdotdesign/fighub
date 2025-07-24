@@ -61,8 +61,8 @@ export const formatTime = (timestamp: number): string => {
   return `${hours}:${minutes}:${seconds} ${ampm}`;
 };
 
-export const getCommitTheme = (commitDate: number) => {
-  const now = new Date(commitDate);
+export const getCommitTheme = (timestamp: number) => {
+  const now = new Date(timestamp);
   const hour = now.getHours();
 
   const isDaytime = hour >= 6 && hour < 18;

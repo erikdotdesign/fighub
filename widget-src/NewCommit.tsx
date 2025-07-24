@@ -13,7 +13,7 @@ const NewCommit = ({
   style,
   commitId,
   createdIds,
-  changedIds,
+  modifiedIds,
   deletedIds,
   showTrackingUI,
   showCommitUI
@@ -21,7 +21,7 @@ const NewCommit = ({
   style: ThemedStyle;
   commitId: number;
   createdIds: string[];
-  changedIds: string[];
+  modifiedIds: string[];
   deletedIds: string[];
   showTrackingUI: () => void;
   showCommitUI: () => void;
@@ -42,7 +42,7 @@ const NewCommit = ({
           style={style}
           diff={{
             created: createdIds.length,
-            changed: changedIds.length,
+            modified: modifiedIds.length,
             deleted: deletedIds.length
           }} />
         <AutoLayout

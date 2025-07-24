@@ -7,10 +7,10 @@ const { AutoLayout, Text } = widget;
 
 const CommitDateTime = ({
   style,
-  date
+  timestamp
 }: {
   style: ThemedStyle;
-  date: number
+  timestamp: number;
 }) => {
   return (
     <AutoLayout
@@ -35,7 +35,7 @@ const CommitDateTime = ({
         fontSize={style.fontSize.large}
         lineHeight={style.lineHeight.large}
         fill={style.color.primary}>
-        { getDayName(date) }
+        { getDayName(timestamp) }
       </Text>
       <Text
         width="fill-parent"
@@ -44,7 +44,7 @@ const CommitDateTime = ({
         fontSize={style.fontSize.medium}
         lineHeight={style.lineHeight.medium}
         fill={style.color.primary}>
-        { formatDateWithOrdinal(date) }
+        { formatDateWithOrdinal(timestamp) }
       </Text>
       <Text
         width="fill-parent"
@@ -53,7 +53,7 @@ const CommitDateTime = ({
         fontSize={style.fontSize.medium}
         lineHeight={style.lineHeight.medium}
         fill={style.color.primary}>
-        { formatTime(date) }
+        { formatTime(timestamp) }
       </Text>
     </AutoLayout>
   )

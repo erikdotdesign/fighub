@@ -1,3 +1,4 @@
+import { CommitDiffItem } from "./types";
 import { capitalize } from "./helpers";
 import { ThemedStyle } from "./style";
 import Label from "./Label";
@@ -11,7 +12,7 @@ const DiffChip = ({
   count
 }: {
   style: ThemedStyle;
-  type: "created" | "changed" | "deleted",
+  type: CommitDiffItem,
   count: number;
 }) => {
 
@@ -20,7 +21,7 @@ const DiffChip = ({
     switch(type) {
       case "created":
         return color.green;
-      case "changed":
+      case "modified":
         return color.yellow;
       case "deleted":
         return color.red;
@@ -31,7 +32,7 @@ const DiffChip = ({
     switch(type) {
       case "created":
         return "+";
-      case "changed":
+      case "modified":
         return "±";
       case "deleted":
         return "-";

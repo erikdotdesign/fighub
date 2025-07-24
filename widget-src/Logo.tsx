@@ -13,10 +13,7 @@ const Logo = ({
       direction="horizontal"
       width="fill-parent"
       height="hug-contents"
-      horizontalAlignItems="center"
-      padding={{
-        top: style.padding.medium
-      }}>
+      horizontalAlignItems="center">
       <Text
         fontFamily={style.fontFamily.mono}
         fontWeight={style.fontWeight.bold}

@@ -1,3 +1,4 @@
+import { Commit, CommitDiffItem } from "./types";
 import { ThemedStyle } from "./style";
 import CommitDiff from "./CommitDiff";
 import CommitId from "./CommitId";
@@ -11,12 +12,12 @@ import CommitHeader from "./CommitHeader";
 const { widget } = figma;
 const { AutoLayout } = widget;
 
-const Commit = ({
+const CommitItem = ({
   style,
   commit
 }: {
   style: ThemedStyle;
-  commit: any
+  commit: Commit
 }) => {
   return (
     <CommitContainer style={style}>
@@ -47,8 +48,8 @@ const Commit = ({
               <DiffChip 
                 key={key}
                 style={style}
-                type={key}
-                count={commit.diff[key]} />
+                type={key as CommitDiffItem}
+                count={commit.diff[key as CommitDiffItem] as number} />
             ))
           }
         </AutoLayout>
@@ -59,7 +60,7 @@ const Commit = ({
           spacing={style.spacing.medium}>
           <CommitDateTime
             style={style}
-            date={commit.date} />
+            timestamp={commit.timestamp} />
           <CommitLocation
             style={style}
             location={commit.location} />
@@ -69,4 +70,4 @@ const Commit = ({
   )
 };
 
-export default Commit;
+export default CommitItem;

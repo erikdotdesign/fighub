@@ -24,7 +24,12 @@ const CommitContainer = ({
       strokeWidth={8}
       stroke={style.color.primary}
       spacing={style.spacing.xLarge}
-      padding={style.padding.medium}>
+      padding={{
+        top: style.padding.xLarge,
+        right: style.padding.medium,
+        bottom: style.padding.medium,
+        left: style.padding.medium
+      }}>
       {
         ...children
       }
