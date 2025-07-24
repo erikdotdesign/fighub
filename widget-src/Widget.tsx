@@ -11,7 +11,7 @@ const Widget = () => {
   const widgetId = useWidgetNodeId();
   const [style, setStyle] = useSyncedState<ThemedStyle>("style", getThemedStyle("light"));
   const [commits, setCommits] = useSyncedState<Commit[]>("commits", []);
-  const [commitId, setCommitId] = useSyncedState<number>("commitId", 0);
+  const [commitId, setCommitId] = useSyncedState<number>("commitId", 1);
   const [createdIds, setCreatedIds] = useSyncedState<string[]>("createdIds", []);
   const [modifiedIds, setModifiedIds] = useSyncedState<string[]>("modifiedIds", []);
   const [deletedIds, setDeletedIds] = useSyncedState<string[]>("deletedIds", []);
