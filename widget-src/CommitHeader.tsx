@@ -10,7 +10,7 @@ const CommitHeader = ({
   commit
 }: {
   style: ThemedStyle;
-  commit: Commit
+  commit: Commit;
 }) => {
   return (
     <AutoLayout

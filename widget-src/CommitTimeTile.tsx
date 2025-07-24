@@ -5,7 +5,7 @@ import Label from "./Label";
 const { widget } = figma;
 const { AutoLayout, Text } = widget;
 
-const CommitDateTime = ({
+const CommitTimeTile = ({
   style,
   timestamp
 }: {
@@ -59,4 +59,4 @@ const CommitDateTime = ({
   )
 };
 
-export default CommitDateTime;
+export default CommitTimeTile;

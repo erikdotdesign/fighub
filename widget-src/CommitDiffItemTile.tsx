@@ -6,7 +6,7 @@ import Label from "./Label";
 const { widget } = figma;
 const { AutoLayout, Text } = widget;
 
-const DiffChip = ({
+const CommitDiffItemTile = ({
   style,
   type,
   count
@@ -67,4 +67,4 @@ const DiffChip = ({
   )
 };
 
-export default DiffChip;
+export default CommitDiffItemTile;

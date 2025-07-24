@@ -5,12 +5,12 @@ import Label from "./Label";
 const { widget } = figma;
 const { AutoLayout, Text } = widget;
 
-const CommitLocation = ({
+const CommitLocTile = ({
   style,
   location
 }: {
   style: ThemedStyle;
-  location: CommitLocation
+  location: CommitLocation;
 }) => {
   return (
     <AutoLayout
@@ -59,4 +59,4 @@ const CommitLocation = ({
   )
 };
 
-export default CommitLocation;
+export default CommitLocTile;

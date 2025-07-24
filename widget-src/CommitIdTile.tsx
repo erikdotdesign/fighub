@@ -4,43 +4,38 @@ import Label from "./Label";
 const { widget } = figma;
 const { AutoLayout, Text } = widget;
 
-const CommitMessage = ({
+const CommitIdTile = ({
   style,
-  message
+  id
 }: {
   style: ThemedStyle;
-  message: string
+  id: number;
 }) => {
   return (
     <AutoLayout
-      minHeight={192}
-      direction="vertical"
+      direction="horizontal"
       width="fill-parent"
       height="hug-contents"
-      verticalAlignItems="start"
-      horizontalAlignItems="start"
+      spacing="auto"
+      verticalAlignItems="center"
       padding={style.padding.shmedium}
-      spacing={style.spacing.small}
       cornerRadius={style.cornerRadius.medium}
       fill={style.color.bg.z1}
       stroke={style.color.bg.z2}
       strokeWidth={1}>
-      <Label
+      <Label 
         style={style}
-        text="Message" />
+        text="Commit" />
       <Text
-        width="fill-parent"
-        height="fill-parent"
-        verticalAlignText="top"
         fontFamily={style.fontFamily.mono}
-        fontWeight={style.fontWeight.normal}
+        fontWeight={style.fontWeight.bold}
         fontSize={style.fontSize.medium}
         lineHeight={style.lineHeight.medium}
-        fill={style.color.primary}>
-        { message }
+        fill={style.color.secondary}>
+        { id }
       </Text>
     </AutoLayout>
   )
 };
 
-export default CommitMessage;
+export default CommitIdTile;

@@ -1,8 +1,8 @@
 import { Commit } from "./types";
 import { mergeUnique, getIpData, getCommitTheme, getAffectedPages } from "./helpers";
 import { getThemedStyle, ThemedStyle } from "./style";
-import NewCommit from "./NewCommit";
-import CommitItem from "./CommitItem";
+import NewCommitCard from "./NewCommitCard";
+import CommitCard from "./CommitCard";
 
 const { widget } = figma;
 const { AutoLayout, useEffect, waitForTask, useSyncedState, useWidgetNodeId } = widget;
@@ -176,18 +176,20 @@ const Widget = () => {
       spacing={style.spacing.large}>
       {
         commits.map((commit) => (
-          <CommitItem
+          <CommitCard
             key={commit.id}
             style={getThemedStyle(commit.theme)}
             commit={commit} />
         ))
       }
-      <NewCommit
+      <NewCommitCard
         style={style}
         commitId={commitId}
-        createdIds={createdIds}
-        modifiedIds={modifiedIds}
-        deletedIds={deletedIds}
+        diff={{
+          created: createdIds.length,
+          modified: modifiedIds.length,
+          deleted: deletedIds.length
+        }}
         showCommitUI={showCommitUI}
         showTrackingUI={showTrackingUI} />
     </AutoLayout>

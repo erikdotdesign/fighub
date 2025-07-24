@@ -1,33 +1,30 @@
+import { CommitDiff } from "./types";
 import { ThemedStyle } from "./style";
 import Logo from "./Logo";
-import CommitDiff from "./CommitDiff";
+import CommitDiffTile from "./CommitDiffTile";
 import TrackerWarning from "./TrackerWarning";
 import Button from "./Button";
-import CommitId from "./CommitId";
-import CommitContainer from "./CommitContainer";
+import CommitIdTile from "./CommitIdTile";
+import CommitCardContainer from "./CommitCardContainer";
 
 const { widget } = figma;
 const { AutoLayout } = widget;
 
-const NewCommit = ({
+const NewCommitCard = ({
   style,
   commitId,
-  createdIds,
-  modifiedIds,
-  deletedIds,
+  diff,
   showTrackingUI,
   showCommitUI
 }: {
   style: ThemedStyle;
   commitId: number;
-  createdIds: string[];
-  modifiedIds: string[];
-  deletedIds: string[];
+  diff: CommitDiff;
   showTrackingUI: () => void;
   showCommitUI: () => void;
 }) => {
   return (
-    <CommitContainer
+    <CommitCardContainer
       style={style}>
       <Logo style={style} />
       <AutoLayout
@@ -35,36 +32,32 @@ const NewCommit = ({
         width="fill-parent"
         height="hug-contents"
         spacing={style.spacing.medium}>
-        <CommitId
+        <CommitIdTile
           style={style}
           id={commitId} />
-        <CommitDiff
+        <CommitDiffTile
           style={style}
-          diff={{
-            created: createdIds.length,
-            modified: modifiedIds.length,
-            deleted: deletedIds.length
-          }} />
+          diff={diff} />
         <AutoLayout
           width="fill-parent"
           direction="horizontal"
           spacing={style.spacing.medium}>
           <Button
-            fillParent={true}
+            width="fill-parent"
             style={style}
             text="Init"
             onClick={showTrackingUI} />
           <Button
+            width="fill-parent"
             primary={true}
-            fillParent={true}
             style={style}
             text="Add"
             onClick={showCommitUI} />
         </AutoLayout>
         <TrackerWarning style={style} />
       </AutoLayout>
-    </CommitContainer>
+    </CommitCardContainer>
   )
 };
 
-export default NewCommit;
+export default NewCommitCard;

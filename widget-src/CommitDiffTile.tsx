@@ -1,19 +1,16 @@
+import { CommitDiff } from "./types";
 import { ThemedStyle } from "./style";
 import Label from "./Label";
 
 const { widget } = figma;
 const { AutoLayout, Text, Span } = widget;
 
-const CommitDiff = ({
+const CommitDiffTile = ({
   style,
   diff
 }: {
   style: ThemedStyle;
-  diff: {
-    created: number;
-    modified: number;
-    deleted: number;
-  }
+  diff: CommitDiff;
 }) => {
   return (
     <AutoLayout
@@ -43,4 +40,4 @@ const CommitDiff = ({
   )
 };
 
-export default CommitDiff;
+export default CommitDiffTile;

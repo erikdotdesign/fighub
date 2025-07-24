@@ -3,7 +3,7 @@ import { ThemedStyle } from "./style";
 const { widget } = figma;
 const { AutoLayout } = widget;
 
-const CommitContainer = ({
+const CommitCardContainer = ({
   style,
   children
 }: {
@@ -37,4 +37,4 @@ const CommitContainer = ({
   )
 };
 
-export default CommitContainer;
+export default CommitCardContainer;

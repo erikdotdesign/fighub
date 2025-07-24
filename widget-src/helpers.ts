@@ -19,7 +19,7 @@ export const getDayName = (timestamp: number) => {
   const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const dayIndex = date.getDay();
   return dayNames[dayIndex];
-}
+};
 
 export const formatDateWithOrdinal = (timestamp: number) => {
   const date = new Date(timestamp);
@@ -35,7 +35,7 @@ export const formatDateWithOrdinal = (timestamp: number) => {
   const ordinal = getOrdinalSuffix(day);
 
   return `${month}, ${day}${ordinal} ${year}`;
-}
+};
 
 export const getOrdinalSuffix = (day: number) => {
   if (day >= 11 && day <= 13) return "th";
@@ -45,7 +45,7 @@ export const getOrdinalSuffix = (day: number) => {
     case 3: return "rd";
     default: return "th";
   }
-}
+};
 
 export const formatTime = (timestamp: number): string => {
   const date = new Date(timestamp);
@@ -68,7 +68,7 @@ export const getCommitTheme = (timestamp: number) => {
   const isDaytime = hour >= 6 && hour < 18;
 
   return isDaytime ? "light" : "dark";
-}
+};
 
 export const getNodePage = (node: any) => {
   let current = node;
@@ -76,7 +76,7 @@ export const getNodePage = (node: any) => {
     current = current.parent;
   }
   return current?.type === "PAGE" ? current : null;
-}
+};
 
 export const capitalize = (str: string): string => {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();

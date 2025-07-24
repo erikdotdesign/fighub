@@ -6,7 +6,7 @@ const { AutoLayout, Text } = widget;
 const TrackerWarning = ({
   style
 }: {
-  style: ThemedStyle
+  style: ThemedStyle;
 }) => {
   return (
     <AutoLayout

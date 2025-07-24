@@ -1,26 +1,26 @@
 import { Commit, CommitDiffItem } from "./types";
 import { ThemedStyle } from "./style";
-import CommitDiff from "./CommitDiff";
-import CommitId from "./CommitId";
-import CommitContainer from "./CommitContainer";
-import CommitMessage from "./CommitMessage";
-import CommitDateTime from "./CommitDateTime";
-import CommitLocation from "./CommitLocation";
-import DiffChip from "./DiffChip";
+import CommitDiffTile from "./CommitDiffTile";
+import CommitIdTile from "./CommitIdTile";
+import CommitCardContainer from "./CommitCardContainer";
+import CommitMessageTile from "./CommitMessageTile";
+import CommitTimeTile from "./CommitTimeTile";
+import CommitLocTile from "./CommitLocTile";
+import CommitDiffItemTile from "./CommitDiffItemTile";
 import CommitHeader from "./CommitHeader";
 
 const { widget } = figma;
 const { AutoLayout } = widget;
 
-const CommitItem = ({
+const CommitCard = ({
   style,
   commit
 }: {
   style: ThemedStyle;
-  commit: Commit
+  commit: Commit;
 }) => {
   return (
-    <CommitContainer style={style}>
+    <CommitCardContainer style={style}>
       <CommitHeader
         style={style}
         commit={commit} />
@@ -29,13 +29,13 @@ const CommitItem = ({
         width="fill-parent"
         height="hug-contents"
         spacing={style.spacing.medium}>
-        <CommitId
+        <CommitIdTile
           style={style}
           id={commit.id} />
-        <CommitDiff
+        <CommitDiffTile
           style={style}
           diff={commit.diff} />
-        <CommitMessage
+        <CommitMessageTile
           style={style}
           message={commit.message} />
         <AutoLayout
@@ -45,7 +45,7 @@ const CommitItem = ({
           spacing={style.spacing.medium}>
           {
             Object.keys(commit.diff).map((key) => (
-              <DiffChip 
+              <CommitDiffItemTile 
                 key={key}
                 style={style}
                 type={key as CommitDiffItem}
@@ -58,16 +58,16 @@ const CommitItem = ({
           width="fill-parent"
           height="hug-contents"
           spacing={style.spacing.medium}>
-          <CommitDateTime
+          <CommitTimeTile
             style={style}
             timestamp={commit.timestamp} />
-          <CommitLocation
+          <CommitLocTile
             style={style}
             location={commit.location} />
         </AutoLayout>
       </AutoLayout>
-    </CommitContainer>
+    </CommitCardContainer>
   )
 };
 
-export default CommitItem;
+export default CommitCard;

@@ -4,13 +4,13 @@ const { widget } = figma;
 const { AutoLayout, Text } = widget;
 
 const Button = ({
-  fillParent,
+  width,
   style,
   primary,
   text,
   onClick
 }: {
-  fillParent?: boolean,
+  width?: WidgetJSX.AutolayoutSize;
   style: ThemedStyle;
   primary?: boolean;
   text: string;
@@ -18,7 +18,7 @@ const Button = ({
 }) => {
   return (
     <AutoLayout
-      width={fillParent ? "fill-parent" : "hug-contents"}
+      width={width ? width : "hug-contents"}
       height="hug-contents"
       direction="horizontal"
       horizontalAlignItems="center"
